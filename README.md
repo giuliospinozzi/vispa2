@@ -6,13 +6,20 @@ Authors: Giulio Spinozzi, Andrea Calabria.
 
 Online web site for demo purpose: http://openserver.itb.cnr.it/vispa2.0/
 
+
 ### What is this repository for? ###
 
 * Quick summary
+Tool for the analysis of retroviral vector integration sites.
+
 * Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+Versione 2.
+
 
 ### How do I get set up? ###
+
+The full research article reports a short manual for tool installation and configuration.
+Further details will be updated here.
 
 * Summary of set up
 * Configuration
@@ -21,13 +28,10 @@ Online web site for demo purpose: http://openserver.itb.cnr.it/vispa2.0/
 * How to run tests
 * Deployment instructions
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
 
 ### Who do I talk to? ###
 
 * Repo owner or admin
-* Other community or team contact
+Giulio Spinozzi (spinozzi.giulio@hsr.it)
+Andrea Calabria (calabria.andrea@hsr.it)
+
