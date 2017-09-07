@@ -4,7 +4,7 @@ VISPA2: A Scalable Pipeline for High-Throughput Identification and Annotation of
 
 Authors: Giulio Spinozzi, Andrea Calabria.
 
-Online web site for demo purpose: http://openserver.itb.cnr.it/vispa2.0/
+Online web site for demo purpose: http://openserver.itb.cnr.it/vispa
 
 
 ### What is this repository for? ###
