@@ -10,10 +10,10 @@ Online web site for demo purpose: http://openserver.itb.cnr.it/vispa
 ## What is this repository for? ##
 
 * Quick summary
-Tool for the analysis of retroviral vector integration sites.
+Tool for the analysis of retroviral vector Integration Sites (IS).
 
 * Version
-Versione 2.
+Vector Integration Site Parallel Analysis, Version 2.
 
 
 ## How do I get set up? ##
@@ -25,7 +25,7 @@ Further details for the configuration and running are updated here.
 ### Summary of set up ###
 The Bash version of VISPA2 is reachable at: https://bitbucket.org/andreacalabria/vispa2
 
-It can process only paired–end Illumina sequencing reads. The single end mode is present (with also the paired-end) in the web version, at: http://openserver.itb.cnr.it/vispa/ 
+It can process (in the bash version) only paired–end Illumina sequencing reads. The single end mode is present (with also the paired-end) in the web version, at: http://openserver.itb.cnr.it/vispa/ 
 
 ### Dependencies ###
 Before proceeding with the next steps make sure you install the software first, making sure these are already in the path.
@@ -199,7 +199,7 @@ cd /opt/applications
 
 hg clone –b ‘v3’ https://bitbucket.org/andreacalabria/vispa2
 ```
-Linking the programs in /usr/local/bin
+Linking the programs in /usr/bin
 ```
 sudo ln -s /opt/applications/scripts/isatk/script/import_iss.py /usr/bin/import_iss
 
@@ -225,12 +225,113 @@ sudo ln –s /opt/applications/scripts/isatk/script/fasta_to_csv.rb /usr/bin/fasta
 ```
 
 ### How to run tests
-### Deployment instructions
+To run VISPA2 is necessary to create an executable bash script, before lunch it:
+```
+touch vispa2_run.sh
+```
 
+Then you can copy the following template, editing the red part with your paths. After that VISPA2 can be lunched:
+```
+nohup ./vispa2_run.sh &
+```
+
+#### Run template (vispa2_run.sh)
+Header of the file:
+
+```
+#!/bin/bash
+
+source /etc/environment
+
+source /etc/profile
+
+TODAY=`date +"%Y%m%d%H%M%S"`;
+```
+
+Editable part, in which you must specify your files:
+
+Header of the file:
+```
+####### ---------- start editing from here ----------------- ########
+
+TMPDIR="/opt/NGS/pipetmpdir/${TODAY}" ;
+
+R1="/storage/dx/backup/nas/LabDevelopment/ftp.gatc-biotech.com/2015-12-28/NG-8959_VP1_lib102988_4287_1_1.fastq.gz";
+
+R2="/storage/dx/backup/nas/LabDevelopment/ftp.gatc-biotech.com/2015-12-28/NG-8959_VP1_lib102988_4287_1_2.fastq.gz";
+
+
+DISEASE="BreastCancer"; # project main name
+
+PATIENT="InsertionalMutagenesis"; 
+
+POOLNAME="POOL1"; 
+
+GENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa"; ## hg19: /opt/genome/human/hg19/index/bwa_7/hg19.fa ; mm9: /opt/genome/mouse/mm9/index/bwa_7/mm9.fa ; mfa5: /opt/genome/monkey/mfa5/index/bwa_7/mfa5.fa
+
+BARCODE_LTR="/opt/applications/scripts/isatk/elements/barcode/barcode.LTR.48.list";
+
+BARCODE_LC="/opt/applications/scripts/isatk/elements/barcode/barcode.LC.48.list";
+
+
+ASSOCIATIONFILE="/opt/applications/scripts/isatk/elements/association/asso.breastcancer.pool1.tsv";  
+
+LTR="/opt/applications/scripts/isatk/elements/sequences/LTR.32bp.fa"; # LTR in forward
+
+LTR_rc="/opt/applications/scripts/isatk/elements/sequences/LTR.32bp.rev.fa"; # LTR in reverse complement
+
+LC_fwd="/opt/applications/scripts/isatk/elements/sequences/LC.assayvalidation.fwd.fa"; # Linker Cassette in forward
+
+LC_rev="/opt/applications/scripts/isatk/elements/sequences/LC.assayvalidation.rc.fa"; # Linker Cassette in reverse
+
+
+DBHOSTID="local";
+
+DBTARGETSCHEMA="sequence_breastcancer";
+
+DBTARGETTABLE="allPools";
+
+PHIXGENOME="/opt/genome/control/phix174/bwa_7/phiX174.fa";
+
+LVGENOME="/opt/genome/vector/lv/bwa_7/lv.backbone.fa"; # Change it ONLY if you want to quantify and remove other vectors or inserted sequences. Alternatives in the GEMINI folder /opt/genome/vector/lv/bwa_7/: {lv.backbone.fa, lv.backbone.hpgk.arsa.wprem.fa, lv.backbone.wasp.was.wprem.fa, lv.plasmid.amp.fa, lv.plasmid.kana.fa}. HIV: /opt/genome/hiv/hiv_hxb2cg/bwa_7/hiv.fa ;
+
+GATKREFGENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa";
+
+CIGARGENOMEID="hg19" ; # Reference genome ID: choose among {hg19 | mm9 | mfa5}
+
+VECTORCIGARGENOMEID="lv"; ## This is the vector reference name (id) used to remove vector sequences. Choose among: {lv, lvarsa, lvwas, lvkana, lvamp, transposon, giada, hiv}
+
+
+CONTAMINANTDB="/opt/applications/scripts/isatk/elements/sequences/UniVec_Tiget.fa";
+
+REMOVE_TMP_DIR="remove_tmp_yes";
+
+####### ---------- end editing here ----------------- ########
+```
+The last part of the file, fixed:
+
+```
+mkdir ${TMPDIR};
+CPUN="`cat /proc/cpuinfo | grep "model name" | wc -l`";
+MAXTHREADS=16;
+FASTQ_QF="lam"; # FASTQ Quality Filter Methods: slim (QF on R1 80bp and R2 TAGs) or lam (QF only on R1 80bp)
+SUBOPTIMALTHRESHOLD='40';
+REPEATS="repeats_no";
+
+##########
+echo "
+[ VISPA2 - PE ] -> STARTING PROCESSING AT:
+"
+date
+vispa2 ${DISEASE} ${PATIENT} ${NGSWORKINGPATH} ${R1} ${R2} ${POOLNAME} ${BARCODE_LTR} ${BARCODE_LC} ${GENOME} ${TMPDIR} ${ASSOCIATIONFILE} ${DBHOSTID} ${DBTARGETSCHEMA} ${DBTARGETTABLE} ${PHIXGENOME} ${LVGENOME} ${CONTAMINANTDB} ${MAXTHREADS} ${GATKREFGENOME} ${CIGARGENOMEID} ${VECTORCIGARGENOMEID} ${SUBOPTIMALTHRESHOLD} ${REMOVE_TMP_DIR} ${LTR} ${LTR_rc} ${LC_fwd} ${LC_rev} ${FASTQ_QF} ${REPEATS}
+echo "
+[ VISPA2 - PE ] -> FINISHED PROCESSING AT:
+"
+date;
+```
 
 ### Who do I talk to? ###
 
 * Repo owner or admin
-Giulio Spinozzi (spinozzi.giulio@hsr.it)
-Andrea Calabria (calabria.andrea@hsr.it)
+Giulio Spinozzi (spinozzi.giulio@hsr.it), Andrea Calabria (calabria.andrea@hsr.it)
 
