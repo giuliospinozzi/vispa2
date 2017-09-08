@@ -45,26 +45,19 @@ In /opt/applications/bin you should install all third-party software like picard
 
 ```
 sudo mkdir /opt/applications
-```
-```
+
 sudo chmod -R 777 /opt/applications
-```
-```
+
 mkdir /opt/applications/bin
-```
-```
+
 sudo mkdir /opt/genome
-```
-```
+
 sudo chmod -R 777 /opt/genome
-```
-```
+
 sudo mkdir /opt/NGS
-```
-```
+
 sudo chmod -R 777 /opt/NGS
-```
-```
+
 mkdir /opt/NGS/results
 ```
 
@@ -74,31 +67,24 @@ You can download from UCSC the FASTA file (index) and annotation file in GTF and
 
 ```
 mkdir /opt/genome/human
-```
-```
+
 mkdir /opt/genome/human/hg19/
-```
-```
+
 mkdir /opt/genome/human/hg19/annotation
-```
-```
+
 mkdir /opt/genome/human/hg19/index
-```
-```
+
 mkdir /opt/genome/human/hg19/index/bwa_7
-```
-```
+
 mkdir /opt/genome/vector
 ```
 In /opt/genome/human/hg19/index/bwa_7 must be inserted the genome (FASTA) and its indexes. The indexes can be built in this way:
 
 ```
 bwa index -a bwtsw REF.fa
-```
-```
+
 samtools faidx REF.fa
-```
-```
+
 java -jar /opt/applications/bin/picard/picard-tools-1.79/CreateSequenceDictionary.jar R=CE.cns.fa O=CE.cns.dict
 ```
 
@@ -113,14 +99,11 @@ Install the dev lib and create two users (all privileges and readonly)
 
 ```
 sudo apt-get install libmysqlclient-dev
-```
-```
+
 mysql -uroot -p
-```
-```
+
 mysql> GRANT ALL PRIVILEGES ON *.* To 'vispa2'@'localhost' IDENTIFIED BY 'vispa2';
-```
-```
+
 mysql> GRANT SELECT ON *.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypswd';
 ```
 
