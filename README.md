@@ -63,7 +63,8 @@ sudo mkdir /opt/NGS
 sudo chmod -R 777 /opt/NGS
 ```
 ```
-mkdir /opt/NGS/results```
+mkdir /opt/NGS/results
+```
 
 ### Database configuration
 ### How to run tests
