@@ -19,9 +19,12 @@ Versione 2.
 ### How do I get set up? ###
 
 The full research article reports a short manual for tool installation and configuration.
-Further details will be updated here.
+Further details for the configuration and running are updated here.
 
 * Summary of set up
+The Bash version of VISPA2 is reachable at: https://bitbucket.org/andreacalabria/vispa2
+It can process only paired–end Illumina sequencing reads. The single end mode is present (with also the paired-end) in the web version, at: http://openserver.itb.cnr.it/vispa/ 
+
 * Configuration
 * Dependencies
 * Database configuration
