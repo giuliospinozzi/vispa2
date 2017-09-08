@@ -68,6 +68,7 @@ sudo chmod -R 777 /opt/NGS
 mkdir /opt/NGS/results
 ```
 
+
 #### Genomes ####
 You can download from UCSC the FASTA file (index) and annotation file in GTF and save in the following paths:
 
@@ -104,7 +105,29 @@ java -jar /opt/applications/bin/picard/picard-tools-1.79/CreateSequenceDictionar
 The same for vector genomes.
 
 
+
 ### Database configuration
+VISPA2 uses MySQL as DBMS.
+
+Install the dev lib and create two users (all privileges and readonly)
+
+```
+sudo apt-get install libmysqlclient-dev
+```
+```
+mysql -uroot -p
+```
+```
+mysql> GRANT ALL PRIVILEGES ON *.* To 'vispa2'@'localhost' IDENTIFIED BY 'vispa2';
+```
+```
+mysql> GRANT SELECT ON *.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypswd';
+```
+
+
+### Software configuration
+#### BWA
+
 ### How to run tests
 ### Deployment instructions
 
