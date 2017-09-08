@@ -28,12 +28,16 @@ The Bash version of VISPA2 is reachable at: https://bitbucket.org/andreacalabria
 It can process only paired–end Illumina sequencing reads. The single end mode is present (with also the paired-end) in the web version, at: http://openserver.itb.cnr.it/vispa/ 
 
 ### Dependencies ###
+Before proceeding with the next steps make sure you install the software first, making sure these are already in the path.
+
 * [MySQL server] (https://dev.mysql.com/downloads/mysql/)
+* [Pigz] (https://zlib.net/pigz/)
+* [GNU Parallel] (https://www.gnu.org/software/parallel/)
 * [Fastqc] (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 * [Bwa] (http://bio-bwa.sourceforge.net/bwa.shtml)
 * [Samtools] (http://www.htslib.org/doc/samtools.html)
 * [Trimmomatic] (www.usadellab.org/cms/?page=trimmomatic)
-* [fastq-multx] (https://expressionanalysis.github.io/ea-utils/)
+* [EA-Utils] (https://expressionanalysis.github.io/ea-utils/)
 * [flexbar] (https://github.com/seqan/flexbar)
 * [bamtools] (https://github.com/pezmaster31/bamtools)
 * [FilterSamReads/MergeSamFiles] (https://broadinstitute.github.io/picard/)
@@ -77,6 +81,11 @@ mkdir /opt/genome/human/hg19/index
 mkdir /opt/genome/human/hg19/index/bwa_7
 
 mkdir /opt/genome/vector
+...
+mkdir /opt/genome/control
+
+mkdir /opt/genome/control/phix
+...
 ```
 In /opt/genome/human/hg19/index/bwa_7 must be inserted the genome (FASTA) and its indexes. The indexes can be built in this way:
 
