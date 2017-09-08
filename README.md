@@ -190,23 +190,23 @@ cd /opt/applications
 
 hg clone –b ‘v3’ https://bitbucket.org/andreacalabria/vispa2
 ```
-Link the programs in /usr/local/bin
+Linking the programs in /usr/local/bin
 ```
-sudo ln -s isatk/script/import_iss.py /usr/bin/import_iss
+sudo ln -s /opt/applications/scripts/isatk/script/import_iss.py /usr/bin/import_iss
 
-sudo ln -s isatk/script/fqreverseextract.pureheader.py /usr/bin/fqreverseextract.pureheader
+sudo ln -s /opt/applications/scripts/isatk/script/fqreverseextract.pureheader.py /usr/bin/fqreverseextract.pureheader
 
-sudo ln -s isatk/script/fqextract.pureheader.py /usr/bin/fqextract.pureheader
+sudo ln -s /opt/applications/scripts/isatk/script/fqextract.pureheader.py /usr/bin/fqextract.pureheader
 
-sudo ln -s isatk/script/rev_extract_header.py /usr/bin/rev_extract_header
+sudo ln -s /opt/applications/scripts/isatk/script/rev_extract_header.py /usr/bin/rev_extract_header
 
-sudo ln -s isatk/script/extract_header.py /usr/bin/extract_header
+sudo ln -s /opt/applications/scripts/isatk/script/extract_header.py /usr/bin/extract_header
 
-sudo ln -s isatk/script/filter_by_cigar_bam.py /usr/bin/filter_by_cigar_bam
+sudo ln -s /opt/applications/scripts/isatk/script/filter_by_cigar_bam.py /usr/bin/filter_by_cigar_bam
 
-sudo ln -s isatk/script/filter_by_mate.py /usr/bin/filter_by_mate
+sudo ln -s /opt/applications/scripts/isatk/script/filter_by_mate.py /usr/bin/filter_by_mate
 
-sudo ln -s isatk/script/dbimport_redundantiss_from_bed.v2.py /usr/bin/isa_importrediss_frombed
+sudo ln -s /opt/applications/scripts/isatk/script/dbimport_redundantiss_from_bed.v2.py /usr/bin/isa_importrediss_frombed
 
 sudo ln -s /opt/applications/scripts/isatk/script/annotate_matrix_v2.sh /usr/bin/annotate_matrix
 
