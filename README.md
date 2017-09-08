@@ -251,59 +251,42 @@ TODAY=`date +"%Y%m%d%H%M%S"`;
 Editable part, in which you must specify your files:
 
 Header of the file:
-```
+```sh
 ####### ---------- start editing from here ----------------- ########
 
 TMPDIR="/opt/NGS/pipetmpdir/${TODAY}" ;
 
 R1="/storage/dx/backup/nas/LabDevelopment/ftp.gatc-biotech.com/2015-12-28/NG-8959_VP1_lib102988_4287_1_1.fastq.gz";
-
 R2="/storage/dx/backup/nas/LabDevelopment/ftp.gatc-biotech.com/2015-12-28/NG-8959_VP1_lib102988_4287_1_2.fastq.gz";
 
-
 DISEASE="BreastCancer"; # project main name
-
 PATIENT="InsertionalMutagenesis"; 
-
 POOLNAME="POOL1"; 
 
 GENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa"; ## hg19: /opt/genome/human/hg19/index/bwa_7/hg19.fa ; mm9: /opt/genome/mouse/mm9/index/bwa_7/mm9.fa ; mfa5: /opt/genome/monkey/mfa5/index/bwa_7/mfa5.fa
 
 BARCODE_LTR="/opt/applications/scripts/isatk/elements/barcode/barcode.LTR.48.list";
-
 BARCODE_LC="/opt/applications/scripts/isatk/elements/barcode/barcode.LC.48.list";
-
 
 ASSOCIATIONFILE="/opt/applications/scripts/isatk/elements/association/asso.breastcancer.pool1.tsv";  
 
 LTR="/opt/applications/scripts/isatk/elements/sequences/LTR.32bp.fa"; # LTR in forward
-
 LTR_rc="/opt/applications/scripts/isatk/elements/sequences/LTR.32bp.rev.fa"; # LTR in reverse complement
-
 LC_fwd="/opt/applications/scripts/isatk/elements/sequences/LC.assayvalidation.fwd.fa"; # Linker Cassette in forward
-
 LC_rev="/opt/applications/scripts/isatk/elements/sequences/LC.assayvalidation.rc.fa"; # Linker Cassette in reverse
 
-
 DBHOSTID="local";
-
 DBTARGETSCHEMA="sequence_breastcancer";
-
 DBTARGETTABLE="allPools";
 
 PHIXGENOME="/opt/genome/control/phix174/bwa_7/phiX174.fa";
 
 LVGENOME="/opt/genome/vector/lv/bwa_7/lv.backbone.fa"; # Change it ONLY if you want to quantify and remove other vectors or inserted sequences. Alternatives in the GEMINI folder /opt/genome/vector/lv/bwa_7/: {lv.backbone.fa, lv.backbone.hpgk.arsa.wprem.fa, lv.backbone.wasp.was.wprem.fa, lv.plasmid.amp.fa, lv.plasmid.kana.fa}. HIV: /opt/genome/hiv/hiv_hxb2cg/bwa_7/hiv.fa ;
-
 GATKREFGENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa";
-
 CIGARGENOMEID="hg19" ; # Reference genome ID: choose among {hg19 | mm9 | mfa5}
-
 VECTORCIGARGENOMEID="lv"; ## This is the vector reference name (id) used to remove vector sequences. Choose among: {lv, lvarsa, lvwas, lvkana, lvamp, transposon, giada, hiv}
 
-
 CONTAMINANTDB="/opt/applications/scripts/isatk/elements/sequences/UniVec_Tiget.fa";
-
 REMOVE_TMP_DIR="remove_tmp_yes";
 
 ####### ---------- end editing here ----------------- ########
