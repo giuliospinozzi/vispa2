@@ -249,7 +249,6 @@ TODAY=`date +"%Y%m%d%H%M%S"`;
 
 Editable part, in which you must specify your files:
 
-Header of the file:
 ```sh
 ####### ---------- start editing from here ----------------- ########
 
