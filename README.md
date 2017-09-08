@@ -126,7 +126,34 @@ mysql> GRANT SELECT ON *.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypswd
 
 
 ### Software configuration
+VISPA2 requires specific links to run the programs, here the creation.
+
 #### BWA
+```
+sudo ln -s /opt/applications/bin/bwa/bwa-0.7.15/bwa /usr/bin/bwa-stable
+```
+
+#### Flexbar (Version 2.5)
+Put this line in you path:
+```
+export LD_LIBRARY_PATH=/path/FlexbarDir:$LD_LIBRARY_PATH
+```
+And the specific link to this version:
+```
+sudo ln -s /opt/applications/bin/flexbar/flexbar_v2.5/flexbar /usr/bin/flexbar2.5
+```
+
+#### Trimmomatic
+```
+sudo ln -s /opt/applications/scripts/isatk/utils/trimmomatic.sh /usr/bin/trimmomatic
+```
+The bash script, trimmomatic.sh, contains:
+```
+#!/bin/bash
+
+java -jar /opt/applications/bin/trimmomatic/trimmomatic-0.36.jar $@
+
+```
 
 ### How to run tests
 ### Deployment instructions
