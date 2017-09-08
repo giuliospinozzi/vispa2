@@ -22,20 +22,20 @@ The full research article reports a short manual for tool installation and confi
 Further details for the configuration and running are updated here.
 
 * Summary of set up
-<br>The Bash version of VISPA2 is reachable at: https://bitbucket.org/andreacalabria/vispa2
+The Bash version of VISPA2 is reachable at: https://bitbucket.org/andreacalabria/vispa2
 It can process only paired–end Illumina sequencing reads. The single end mode is present (with also the paired-end) in the web version, at: http://openserver.itb.cnr.it/vispa/ 
 
 * Dependencies
-<br>MySQL server (https://dev.mysql.com/downloads/mysql/)
-<br>Fastqc (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-<br>Bwa (http://bio-bwa.sourceforge.net/bwa.shtml)
-<br>Samtools (http://www.htslib.org/doc/samtools.html)
-<br>Trimmomatic (www.usadellab.org/cms/?page=trimmomatic)
-<br>fastq-multx (https://expressionanalysis.github.io/ea-utils/)
-<br>flexbar (https://github.com/seqan/flexbar)
-<br>bamtools (https://github.com/pezmaster31/bamtools)
-<br>FilterSamReads/MergeSamFiles (https://broadinstitute.github.io/picard/)
-<br>Bedtools (https://github.com/arq5x/bedtools2/releases)
+MySQL server (https://dev.mysql.com/downloads/mysql/)
+Fastqc (http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+Bwa (http://bio-bwa.sourceforge.net/bwa.shtml)
+Samtools (http://www.htslib.org/doc/samtools.html)
+Trimmomatic (www.usadellab.org/cms/?page=trimmomatic)
+fastq-multx (https://expressionanalysis.github.io/ea-utils/)
+flexbar (https://github.com/seqan/flexbar)
+bamtools (https://github.com/pezmaster31/bamtools)
+FilterSamReads/MergeSamFiles (https://broadinstitute.github.io/picard/)
+Bedtools (https://github.com/arq5x/bedtools2/releases)
 
 * Configuration
 * Database configuration
