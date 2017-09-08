@@ -155,6 +155,83 @@ java -jar /opt/applications/bin/trimmomatic/trimmomatic-0.36.jar $@
 
 ```
 
+#### Picard
+```
+sudo ln -s /opt/applications/scripts/isatk/utils/FilterSamReads.sh /usr/bin/FilterSamReads
+```
+The bash script, FilterSamReads.sh, contains:
+```
+#!/bin/bash
+
+picard FilterSamReads $@
+```
+```
+sudo ln -s /opt/applications/scripts/isatk/utils/MergeSamReads.sh /usr/bin/MergeSamReads
+```
+The bash script, MergeSamReads.sh, contains:
+```
+#!/bin/bash
+
+picard FilterSamReads $@
+```
+
+
+#### Python
+The following packages are required:
+```
+sudo -H pip install MySQL-python
+
+sudo -H pip install pysam==0.7.7
+
+sudo -H pip install biopython
+
+sudo -H pip install HTSeq
+
+sudo -H pip install rpy2
+
+sudo -H pip install scipy
+
+sudo -H pip install numpy
+
+sudo -H pip install matplotlib
+
+sudo -H pip install xlsxwriter
+
+sudo -H pip install pandas
+```
+
+#### Repositoy configuration
+Cloning
+```
+cd /opt/applications
+
+hg clone –b ‘v3’ https://bitbucket.org/andreacalabria/vispa2
+```
+Link the programs in /usr/local/bin
+```
+sudo ln -s isatk/script/import_iss.py /usr/bin/import_iss
+
+sudo ln -s isatk/script/fqreverseextract.pureheader.py /usr/bin/fqreverseextract.pureheader
+
+sudo ln -s isatk/script/fqextract.pureheader.py /usr/bin/fqextract.pureheader
+
+sudo ln -s isatk/script/rev_extract_header.py /usr/bin/rev_extract_header
+
+sudo ln -s isatk/script/extract_header.py /usr/bin/extract_header
+
+sudo ln -s isatk/script/filter_by_cigar_bam.py /usr/bin/filter_by_cigar_bam
+
+sudo ln -s isatk/script/filter_by_mate.py /usr/bin/filter_by_mate
+
+sudo ln -s isatk/script/dbimport_redundantiss_from_bed.v2.py /usr/bin/isa_importrediss_frombed
+
+sudo ln -s /opt/applications/scripts/isatk/script/annotate_matrix_v2.sh /usr/bin/annotate_matrix
+
+sudo ln –s /opt/applications/scripts/isatk/script/fastq_qf.sh /usr/bin/fastq_qf
+
+sudo ln –s /opt/applications/scripts/isatk/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
+```
+
 ### How to run tests
 ### Deployment instructions
 
