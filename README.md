@@ -127,7 +127,7 @@ sudo ln -s /opt/applications/bin/bwa/bwa-0.7.15/bwa /usr/bin/bwa-stable
 
 #### Flexbar (Version 2.5)
 Put this line in you path:
-```
+```sh
 export LD_LIBRARY_PATH=/path/FlexbarDir:$LD_LIBRARY_PATH
 ```
 And the specific link to this version:
@@ -140,7 +140,7 @@ sudo ln -s /opt/applications/bin/flexbar/flexbar_v2.5/flexbar /usr/bin/flexbar2.
 sudo ln -s /opt/applications/scripts/isatk/utils/trimmomatic.sh /usr/bin/trimmomatic
 ```
 The bash script, trimmomatic.sh, contains:
-```
+```sh
 #!/bin/bash
 
 java -jar /opt/applications/bin/trimmomatic/trimmomatic-0.36.jar $@
@@ -152,7 +152,7 @@ java -jar /opt/applications/bin/trimmomatic/trimmomatic-0.36.jar $@
 sudo ln -s /opt/applications/scripts/isatk/utils/FilterSamReads.sh /usr/bin/FilterSamReads
 ```
 The bash script, FilterSamReads.sh, contains:
-```
+```sh
 #!/bin/bash
 
 picard FilterSamReads $@
@@ -161,7 +161,7 @@ picard FilterSamReads $@
 sudo ln -s /opt/applications/scripts/isatk/utils/MergeSamReads.sh /usr/bin/MergeSamReads
 ```
 The bash script, MergeSamReads.sh, contains:
-```
+```sh
 #!/bin/bash
 
 picard FilterSamReads $@
@@ -194,7 +194,7 @@ sudo -H pip install pandas
 
 #### Repositoy configuration
 Cloning
-```
+```sh
 cd /opt/applications
 
 hg clone –b ‘v3’ https://bitbucket.org/andreacalabria/vispa2
@@ -226,23 +226,22 @@ sudo ln –s /opt/applications/scripts/isatk/script/fasta_to_csv.rb /usr/bin/fasta
 
 ### How to run tests
 To run VISPA2 is necessary to create an executable bash script, before lunch it:
-```
+```sh
 touch vispa2_run.sh
 ```
 
 Then you can copy the following template, editing the red part with your paths. After that VISPA2 can be lunched:
-```
+```sh
 nohup ./vispa2_run.sh &
 ```
 
 #### Run template (vispa2_run.sh)
 Header of the file:
 
-```
+```sh
 #!/bin/bash
 
 source /etc/environment
-
 source /etc/profile
 
 TODAY=`date +"%Y%m%d%H%M%S"`;
@@ -293,7 +292,7 @@ REMOVE_TMP_DIR="remove_tmp_yes";
 ```
 The last part of the file, fixed:
 
-```
+```sh
 mkdir ${TMPDIR};
 CPUN="`cat /proc/cpuinfo | grep "model name" | wc -l`";
 MAXTHREADS=16;
