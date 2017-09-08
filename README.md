@@ -43,19 +43,14 @@ It can process only paired–end Illumina sequencing reads. The single end mode is
 #### Directories ####
 ```
 sudo mkdir /opt/applications
-
+```
+```
 sudo chmod -R 777 /opt/applications
-
 mkdir /opt/applications/bin
-
 sudo mkdir /opt/genome
-
 sudo chmod -R 777 /opt/genome
-
 sudo mkdir /opt/NGS
-
 sudo chmod -R 777 /opt/NGS
-
 mkdir /opt/NGS/results```
 
 ### Database configuration
