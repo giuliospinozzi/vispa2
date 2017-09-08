@@ -41,6 +41,8 @@ It can process only paired–end Illumina sequencing reads. The single end mode is
 
 ### Configuration
 #### Directories ####
+In /opt/applications/bin you should install all third-party software like picard, ea-utils… while in /opt/NGS/results the final result folder (bam, bed…)
+
 ```
 sudo mkdir /opt/applications
 ```
@@ -65,6 +67,42 @@ sudo chmod -R 777 /opt/NGS
 ```
 mkdir /opt/NGS/results
 ```
+
+#### Genomes ####
+You can download from UCSC the FASTA file (index) and annotation file in GTF and save in the following paths:
+
+```
+mkdir /opt/genome/human
+```
+```
+mkdir /opt/genome/human/hg19/
+```
+```
+mkdir /opt/genome/human/hg19/annotation
+```
+```
+mkdir /opt/genome/human/hg19/index
+```
+```
+mkdir /opt/genome/human/hg19/index/bwa_7
+```
+```
+mkdir /opt/genome/vector
+```
+In /opt/genome/human/hg19/index/bwa_7 must be inserted the genome (FASTA) and its indexes. The indexes can be built in this way:
+
+```
+bwa index -a bwtsw REF.fa
+```
+```
+samtools faidx REF.fa
+```
+```
+java -jar /opt/applications/bin/picard/picard-tools-1.79/CreateSequenceDictionary.jar R=CE.cns.fa O=CE.cns.dict
+```
+
+The same for vector genomes.
+
 
 ### Database configuration
 ### How to run tests
