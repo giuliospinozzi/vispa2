@@ -24,8 +24,7 @@ Details for the configuration and running:
 
 * [Paired-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd) (Illumina) of VISPA2:
 
-* Single-end mode of VISPA2:
-https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd
+* [Single-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd) of VISPA2:
 
 ### Who do I talk to? ###
 
