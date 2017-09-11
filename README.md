@@ -26,6 +26,8 @@ Details for the configuration and running:
 
 * [Single-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd) of VISPA2
 
+* [CreateMatrix](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-IS_Matrix) file of IS sites.
+
 ### Who do I talk to? ###
 
 * Repo owner or admin
