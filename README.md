@@ -20,12 +20,12 @@ Vector Integration Site Parallel Analysis, Version 2.
 
 The full research article reports a short manual for tool installation and configuration.
 
-Further details for the configuration and running are updated here.
+Details for the configuration and running:
 
-For the paired-end mode (Illumina) of VISPA2 please read the detailed configuration:
+* For the paired-end mode (Illumina) of VISPA2 please read the detailed configuration:
 https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd
 
-For the single-end mode of VISPA2 please read the detailed configuration:
+* For the single-end mode of VISPA2 please read the detailed configuration:
 https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd
 
 ### Who do I talk to? ###
