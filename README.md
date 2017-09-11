@@ -5,7 +5,7 @@ VISPA2: A Scalable Pipeline for High-Throughput Identification and Annotation of
 Authors: Giulio Spinozzi, Andrea Calabria.
 
 Online web site for demo purpose: http://openserver.itb.cnr.it/vispa
-https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd
+
 
 ## What is this repository for? ##
 
@@ -22,6 +22,11 @@ The full research article reports a short manual for tool installation and confi
 
 Further details for the configuration and running are updated here.
 
+For the paired-end mode (Illumina) of VISPA2 please read the detailed configuration:
+https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd
+
+For the single-end mode of VISPA2 please read the detailed configuration:
+https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd
 
 ### Who do I talk to? ###
 
