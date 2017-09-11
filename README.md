@@ -26,7 +26,7 @@ Details for the configuration and running:
 
 * [Single-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd) (454-like) of VISPA2
 
-* [CreateMatrix](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-IS_Matrix), the program for the final matrix file of annotated IS sites.
+* [CreateMatrix](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-IS_Matrix), the program to generate the final matrix file of annotated IS sites.
 
 ### Who do I talk to? ###
 
