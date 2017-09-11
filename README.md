@@ -22,10 +22,9 @@ The full research article reports a short manual for tool installation and confi
 
 Details for the configuration and running:
 
-* For the paired-end mode (Illumina) of VISPA2 please read the detailed configuration:
-https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd
+* [Paired-end mode] (https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd) (Illumina) of VISPA2:
 
-* For the single-end mode of VISPA2 please read the detailed configuration:
+* Single-end mode of VISPA2:
 https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd
 
 ### Who do I talk to? ###
