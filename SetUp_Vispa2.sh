@@ -1,80 +1,91 @@
 #!/bin/bash
+######################  COLOR  ######################
 
-RED='\033[0;31m' 
-NC='\033[0m' # No Color
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
+	RED='\033[0;31m' 
+	NC='\033[0m' # No Color
+	GREEN='\033[0;32m'
+	YELLOW='\033[1;33m'
 
+######################  MY FUNCTION  ######################
+
+	function downloadFromUCSC() {
+		
+		if [[ $1 == "hg38" ]]; then
+			filename="hg38.fa.gz"
+		else
+			filename="chromFa.tar.gz"
+		fi
+
+		finalLink="http://hgdownload.soe.ucsc.edu/goldenPath/$1/bigZips/$filename"
+
+		return $finalLink
+	}
 
 ######################  LINKS  ######################
-
-	#mother link
-	link_ucsc='http://hgdownload.soe.ucsc.edu/goldenPath'
-	#sons links
-	link_hg19=${link_ucsc}'/hg19/bigZips/chromFa.tar.gz'
-	link_hg38=${link_ucsc}'/hg38/bigZips/hg38.fa.gz'
-	link_mm10=${link_ucsc}'/mm10/bigZips/chromFa.tar.gz'
-	link_mm9=${link_ucsc}'/mm9/bigZips/chromFa.tar.gz'
 
 	link_trimmomatic='http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip'
 	link_vispa2='https://bitbucket.org/andreacalabria/vispa2'
 
-usage()
-{
-	echo
-	echo "Set up VISPA-2 PE"
-	echo
-	echo "#Summary:"
-	echo "	This program is an introduction for VISPA2"
-	echo "	You will be able to set up your machine to allow work Vispa2 correctly"
-	echo "	Will downloaded all the dependencies required; $0 installs packages to their own directory [/opt/applications/] and then symlinks their files into /usr/bin"
-	echo "	Furthermore, can decide to download or not genomes present in the list below."
-	echo "	If you prefer to configure manually your machine visit the link: https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd"
-	echo
-	echo "#Usage: $0 [-s START] [-i GENOME.tar.gz]"
-	echo
-	echo "  [-s START] - Use the flag -s to initialize the program. Ex. $0 -s start"
-	echo "  [-i GENOME]  - Use the flag -i to download a Genome. Which GENOME would you like to Download? You MUST use keyword like:"
-  printf "	${GREEN}hg19${NC} --> human genome 19 from http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz \n"
-  printf "	${GREEN}hg38${NC} --> human genome 38 from http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz \n"
-  printf "	${GREEN}mm9${NC} --> mouse 9 from http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/chromFa.tar.gz \n"
-  printf "	${GREEN}mm10${NC} --> mouse 10 from http://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/chromFa.tar.gz \n" 
-	echo
-	exit 
-}
+######################  HELP  ######################
 
-# parse options
-while getopts ":si:h" Option
-	do
-	case $Option in
-		s ) START="$OPTARG" ;;
-		i ) GENOME="$OPTARG" ;;
-		h ) usage ;;
-		* ) echo "unrecognized argument. use '-h' for usage information."; exit -1 ;
-	esac
-done
-shift $(($OPTIND - 1)) #shift $((OPTIND-1)) removes all the options that have been parsed by getopts from 
-#the parameters list, and so after that point, $1 will refer to the first non-option argument passed to the script.
+	usage()
+	{
+		echo
+		echo "Set up VISPA-2 PE"
+		echo
+		echo "#Summary:"
+		echo "	This program is an introduction for VISPA2"
+		echo "	You will be able to set up your machine to allow work Vispa2 correctly"
+		echo "	Will downloaded all the dependencies required; $0 installs packages to their own directory [/opt/applications/] and then symlinks their files into /usr/bin"
+		echo "	Furthermore, can decide to download or not genomes present in the list below."
+		echo "	If you prefer to configure manually your machine visit the link: https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd"
+		echo
+		echo "#Usage: $0 [-s SPECIES] [-i GENOME.tar.gz]"
+		echo
+		echo "  [-s SPECIES] - Use the flag -x to indicate the species of the genome to download. If you use this flag, [-i is required]"
+		echo "  [-i GENOME]  - Use the flag -i to download a Genome. If you use this flag, [-s is required]. 
+			 Which GENOME would you like to Download? You MUST use keyword like:"
+		echo
+	  printf "	${GREEN}hg19${NC} --> human genome 19 from http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz \n"
+	  printf "	${GREEN}hg38${NC} --> human genome 38 from http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz \n"
+	  printf "	${GREEN}mm9${NC} --> mouse 9 from http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/chromFa.tar.gz \n"
+	  printf "	${GREEN}mm10${NC} --> mouse 10 from http://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/chromFa.tar.gz \n" 
+		echo
+		exit 
+	}
 
-# check input GENOME
+######################  MAIN  ######################
 
-if [ "$GENOME" == "hg19" ]; then
-	to_Download=$link_hg19
-	species="human"
-	folder_name="hg19"
-elif [ "$GENOME" == "hg38" ]; then
-	to_Download=$link_hg38
-	species="human"
-	folder_name="hg38"
-elif [ "$GENOME" == "mm10" ]; then
-	to_Download=$link_mm10
-	folder_name="mm10"
-	species="mouse"
-elif [ "$GENOME" == "mm9" ]; then
-	to_Download=$link_mm9
-	folder_name="mm9"
-	species="mouse"
-fi
+	# parse options
+	while getopts ":s:i:h" Option
+		do
+		case $Option in
+			s ) SPECIES="$OPTARG" ;;
+			i ) GENOME="$OPTARG" ;;
+			h ) usage ;;
+			* ) echo "unrecognized argument. use '-h' for usage information."; exit -1 ;
+		esac
+	done
+	shift $(($OPTIND - 1)) #shift $((OPTIND-1)) removes all the options that have been parsed by getopts from 
+	#the parameters list, and so after that point, $1 will refer to the first non-option argument passed to the script.
+
+	#check input
+	if [[ $GENOME != "" ]]; then
+		if [[ -z $SPECIES ]]; then
+			echo "option '-i' requires option '-s'. use '-h' for usage information."; exit -1 ;
+		fi
+	fi
+
+	if [[ -n $SPECIES ]]; then
+		if [[ -z $GENOME ]]; then
+			echo "option '-s' requires option '-i'. use '-h' for usage information."; exit -1 ;
+		fi
+	fi
+
+	#species="human"
+	#folder_name="hg19"
+
+	to_Download=`downloadFromUCSC $GENOME`
 
 ######################  VARS and relative ORDER POSITION ######################
 
@@ -88,9 +99,7 @@ fi
 	PATHGENOME="/opt/genome"
 	# Create destination folder var
 	if [ -n "$GENOME" ]; then
-		FOLDERGENOME=${PATHGENOME}"/"${species}"/"${folder_name}
-	else 
-		FOLDERGENOME=${PATHGENOME}"/species/"	
+		FOLDERGENOME=${PATHGENOME}"/"$SPECIES"/"$GENOME 
 	fi
 
 ###################### DEPENDENCIES ######################
@@ -216,17 +225,11 @@ fi
 		echo ""
 		echo "File Concatenation..."
 		
-		if [ $species == "human" ]; then	
-			for i in {1..22}; do
-				cat chr$i.fa >> $out_name.fa
-			done
-
-		elif [ $species == "mouse" ]; then
-			for i in {1..19}; do
-				cat chr$i.fa >> $out_name.fa
-			done
-
-		fi
+		chr_numer=`ls | grep -E "[[:digit:]].fa" | wc -l`
+		
+		for i in $(seq 1 $chr_number); do
+			cat chr$i.fa >> $out_name.fa
+		done
 
 		cat chrX.fa >> $out_name.fa
 		cat chrY.fa >> $out_name.fa
@@ -296,9 +299,6 @@ fi
 	echo "STEP 4: SOFTWARE CONFIGURATION"
 	echo ""
 
-	echo "Soft link creation..."
-	sudo ln -s /usr/bin/bwa /usr/bin/bwa-stable
-
 	echo 'export LD_LIBRARY_PATH=/path/FlexbarDir:$LD_LIBRARY_PATH' >> ~/.bashrc
 	source ~/.bashrc
 	
@@ -352,6 +352,5 @@ fi
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fasta_to_csv"
 	sudo chmod +x /opt/applications/scripts/vispa2/script/fasta_to_csv.rb
 	sudo ln –s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
-
 
 echo "Set up Completed!"
