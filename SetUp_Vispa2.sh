@@ -22,9 +22,16 @@ YELLOW='\033[1;33m'
 usage()
 {
 	echo
-	echo "Set up: VISPA 2 PE"
+	echo "Set up VISPA-2 PE"
 	echo
-	echo "Usage: $0 [-s START] [-i GENOME.tar.gz]"
+	echo "#Summary:"
+	echo "	This program is an introduction for VISPA2"
+	echo "	You will be able to set up your machine to allow work Vispa2 correctly"
+	echo "	Will downloaded all the dependencies required; $0 installs packages to their own directory [/opt/applications/] and then symlinks their files into /usr/bin"
+	echo "	Furthermore, can decide to download or not genomes present in the list below."
+	echo "	If you prefer to configure manually your machine visit the link: https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd"
+	echo
+	echo "#Usage: $0 [-s START] [-i GENOME.tar.gz]"
 	echo
 	echo "  [-s START] - Use the flag -s to initialize the program. Ex. $0 -s start"
 	echo "  [-i GENOME]  - Use the flag -i to download a Genome. Which GENOME would you like to Download? You MUST use keyword like:"
