@@ -82,9 +82,6 @@
 		fi
 	fi
 
-	#species="human"
-	#folder_name="hg19"
-
 	to_Download=`downloadFromUCSC $GENOME`
 
 ######################  VARS and relative ORDER POSITION ######################
@@ -351,9 +348,9 @@
 	sudo ln -s /opt/applications/scripts/vispa2/script/dbimport_redundantiss_from_bed.v2.py /usr/bin/isa_importrediss_frombed
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fastq_qf"
 	sudo chmod +x /opt/applications/scripts/vispa2/script/fastq_qf.sh
-	sudo ln â€“s /opt/applications/scripts/vispa2/script/fastq_qf.sh /usr/bin/fastq_qf
+	sudo ln –s /opt/applications/scripts/vispa2/script/fastq_qf.sh /usr/bin/fastq_qf
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fasta_to_csv"
 	sudo chmod +x /opt/applications/scripts/vispa2/script/fasta_to_csv.rb
-	sudo ln â€“s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
+	sudo ln –s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
 
 echo "Set up Completed!"
