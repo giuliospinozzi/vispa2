@@ -12,13 +12,29 @@
 		
 		if [[ $1 == "hg38" ]]; then
 			filename="hg38.fa.gz"
-		else
+		elif [[ $1 == "hg19" || $1 == "mm10" || $1 == "mm9" || $1 == "mm8" ]] ; then
 			filename="chromFa.tar.gz"
+		else
+			filename="chromFa.zip"
 		fi
 
 		finalLink="http://hgdownload.soe.ucsc.edu/goldenPath/$1/bigZips/$filename"
 
-		return $finalLink
+		echo $finalLink
+	}
+
+	function checkURL() {
+
+		#check if the link exist
+		status=`curl -s --head -w %{http_code} $1 -o /dev/null`
+		
+		if [[ $status == "200" ]]; then
+			 echo "This URL Exist"
+		else
+		    echo "This URL Not Exist"
+		    echo "Check the option -i used. Visit the link http://hgdownload.soe.ucsc.edu/goldenPath/ to search the right Keyword like hg19-mm10-mm9..."
+		    exit -1
+		fi
 	}
 
 ######################  LINKS  ######################
@@ -81,13 +97,18 @@
 			echo "option '-s' requires option '-i'. use '-h' for usage information."; exit -1 ;
 		fi
 	fi
+	
+	if [[ -n "$GENOME" ]]; then
 
-	to_Download=`downloadFromUCSC $GENOME`
-
+		to_Download=`downloadFromUCSC $GENOME`
+		checkURL $to_Download
+		file_name=`echo $to_Download | cut -d'/' -f 7` #[ex chromFa.tar.gz]
+		out_name=`echo $to_Download | cut -d'/' -f 5`  #[ex hg38]
+	
+	fi
+	
 ######################  VARS and relative ORDER POSITION ######################
-
-	file_name=`echo $to_Download | cut -d'/' -f 7` #[ex chromFa.tar.gz]
-	out_name=`echo $to_Download | cut -d'/' -f 5`	#[ex hg38]
+	
 	# Create destination folder var
 	APPLICATIONS="/opt/applications"
 	# Create destination folder var
@@ -348,9 +369,9 @@
 	sudo ln -s /opt/applications/scripts/vispa2/script/dbimport_redundantiss_from_bed.v2.py /usr/bin/isa_importrediss_frombed
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fastq_qf"
 	sudo chmod +x /opt/applications/scripts/vispa2/script/fastq_qf.sh
-	sudo ln –s /opt/applications/scripts/vispa2/script/fastq_qf.sh /usr/bin/fastq_qf
+	sudo ln -s /opt/applications/scripts/vispa2/script/fastq_qf.sh /usr/bin/fastq_qf
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fasta_to_csv"
 	sudo chmod +x /opt/applications/scripts/vispa2/script/fasta_to_csv.rb
-	sudo ln –s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
+	sudo ln -s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
 
 echo "Set up Completed!"
