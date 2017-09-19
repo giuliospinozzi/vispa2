@@ -279,10 +279,11 @@
 ###################### DATABASE CONFIGURATION ######################
 
 	#VISPA2 uses MySQL as DBMS.
-	echo "Install the dev lib and create two users (all privileges and readonly)"
+	echo "Install the dev lib and create three users (all privileges and readonly and all PRIVILEGES andrea)"
 	echo "	
 		GRANT ALL PRIVILEGES ON *.* To 'vispa2'@'localhost' IDENTIFIED BY 'vispa2';
 		GRANT SELECT ON *.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypswd';
+		GRANT SELECT ON *.* TO 'andrea'@'localhost' IDENTIFIED BY 'andrea';
 		MYSQL...
 	"
 	mysql -uroot -p -e "
@@ -290,6 +291,8 @@
 		GRANT ALL PRIVILEGES ON *.* To 'vispa2'@'localhost' IDENTIFIED BY 'vispa2';
 
 		GRANT SELECT ON *.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypswd';
+
+		GRANT SELECT ON *.* TO 'andrea'@'localhost' IDENTIFIED BY 'andrea';
 
 	"
 
