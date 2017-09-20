@@ -37,6 +37,8 @@ Details for the configuration and running:
 
 * [CreateMatrix](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-IS_Matrix), the program to generate the final matrix file of annotated IS sites.
 
+* [Installation Test](https://bitbucket.org/andreacalabria/vispa2/wiki/Test%20VISPA2%20installation%20with%20a%20sample%20dataset)
+
 ### Who do I talk to? ###
 
 * Repo owner or admin
