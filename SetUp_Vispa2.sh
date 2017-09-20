@@ -320,7 +320,7 @@
 
 		GRANT SELECT ON *.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypswd';
 
-		GRANT SELECT ON *.* TO 'andrea'@'localhost' IDENTIFIED BY 'andrea';
+		GRANT ALL PRIVILEGES ON *.* TO 'andrea'@'localhost' IDENTIFIED BY 'andrea';
 
 	"
 
@@ -364,7 +364,7 @@
 	sudo ln -s /opt/applications/scripts/vispa2/pipeline/illumina/VISPA2.IlluminaMiSeq.pipeline.sh /usr/bin/vispa2
 	sudo ln -s /opt/applications/scripts/vispa2/script/annotate_matrix_v2.sh /usr/bin/annotate_matrix
 	sudo ln -s /opt/applications/scripts/vispa2/script/annotate_bed.py /usr/bin/annotate_bed
-	sudo ln -s /opt/applications/scripts/integration_analysis/Integration_Analysis.py /usr/bin/create_matrix
+	sudo ln -s /opt/applications/scripts/integration_analysis/src/Integration_Analysis_main.py /usr/bin/create_matrix
 
 
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/import_iss"
