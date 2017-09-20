@@ -70,7 +70,7 @@ REMOVE_TMP_DIR="remove_tmp_yes"; # remove tmp dirs? remove_tmp_yes
 ##### ========================== Fixed Parameters =========================== #####
 ## Creating Dirs
 TMPDIR="/opt/NGS/pipetmpdir/${TODAY}";
-mkdir ${TMPDIR};
+mkdir -p ${TMPDIR};
 #=================================================================================#
 
 
