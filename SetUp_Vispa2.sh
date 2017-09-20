@@ -230,7 +230,7 @@
 		echo "No Genome will be downloaded, SKIP to step 4..."
 	else
 		printf "Folders creation --> "${FOLDERGENOME}"/annotation"
-		mkdir -p ${FOLDERGENOME}/annotation
+		sudo mkdir -p ${FOLDERGENOME}/annotation
 		echo ""
 		echo "Downloading from UCSC the FASTA file and annotation file in GTF and saved in the this path --> "${FOLDERGENOME}
 		echo ""
@@ -273,7 +273,7 @@
 		fi
 
 		printf "${YELLOW}@@@@ Folders creation --> "${FOLDERGENOME}"/index/bwa_7${NC}\n"
-		mkdir -p ${FOLDERGENOME}/index/bwa_7
+		sudo mkdir -p ${FOLDERGENOME}/index/bwa_7
 
 		cd ${FOLDERGENOME}																														#pwd ----> /opt/genome/species/type/
 		echo "moving "$out_name.fa" in "${FOLDERGENOME}"/index/bwa_7"
@@ -290,9 +290,9 @@
 	fi
 	
 	printf "${YELLOW} @@@@ Folders creation --> "${PATHGENOME}"/vector${NC}\n"
-	mkdir -p ${PATHGENOME}/vector
+	sudo mkdir -p ${PATHGENOME}/vector
 	printf "${YELLOW} @@@@ Folders creation --> "${PATHGENOME}"/control/phix${NC}\n"
-	mkdir -p ${PATHGENOME}/control/phix
+	sudo mkdir -p ${PATHGENOME}/control/phix
 
 ###################### DATABASE CONFIGURATION ######################
 
