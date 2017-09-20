@@ -143,7 +143,13 @@
 		sudo apt-get install parallel
 	echo ""
 	printf "${YELLOW}##### Installing fastqc #####${NC}\n"
-		sudo apt-get install fastqc
+		#sudo apt-get install fastqc
+		curl -Os https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
+		unzip fastqc_v0.11.5.zip
+		sudo mv FastQC fastqc
+		sudo mv fastqc /etc
+		sudo chmod +x /etc/fastqc/fastqc
+		ln -s /etc/fastqc/fastqc /usr/bin/fastqc
 	echo ""
 	printf "${YELLOW}##### Installing bwa #####${NC}\n"
 		sudo apt-get install bwa
@@ -153,7 +159,7 @@
 		sudo apt-get install samtools
 	echo ""
 	printf "${YELLOW}##### Installing trimmomatic #####${NC}\n"
-		curl -O $link_trimmomatic
+		curl -Os $link_trimmomatic
 		unzip Trimmomatic-0.36.zip
 		cd Trimmomatic-0.36																										#pwd ----> /opt/applications/trimmomatic-0.36
 		mkdir -p ${BIN}
@@ -206,9 +212,15 @@
 		cd $APPLICATIONS/scripts
 		sudo hg clone $link_vispa2
 	echo ""
-	printf "${YELLOW}##### integration_analysis IN "$APPLICATIONS"/scripts${NC}\n"
+	printf "${YELLOW}##### CLONING integration_analysis IN "$APPLICATIONS"/scriptscre${NC}\n"
 	#cloning integration_analysis
 		sudo hg clone https://bitbucket.org/tigetbioinformatics/integration_analysis
+	echo ""
+	printf "${YELLOW}#####  Installing dos2unix "$APPLICATIONS"/scriptscre${NC}\n"
+		sudo apt-get install dos2unix
+		cd integration_analysis/src/
+		for i in `ls`; do dos2unix $i ; done
+		cd $APPLICATIONS/scripts
 
 ###################### CONFIGURATION ######################
 
