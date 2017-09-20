@@ -22,7 +22,7 @@ The full research article reports a short manual for tool installation and confi
 An easy configuration script will support the installation of the pipeline VISPA2. Use the following command line statement that will guide you through the installation and set up (as root user):
 
 ```
-cd VISPA2
+cd vispa2
 # get help from the configuration file
 ./SetUp_Vispa2.sh -h
 # run the installation and configuration of the required tools and download the genome(s), here hg19 and mm10 (this option will also index the reference genome). The script exploits reference genomee common names, as reported in UCSC web site http://hgdownload.soe.ucsc.edu/downloads.html#mouse. Please, enable internet network connections to UCSC web site.
