@@ -195,10 +195,20 @@
 	printf "${YELLOW}##### Installing libmysqlclient-dev #####${NC}\n"
 		sudo apt-get install libmysqlclient-dev
 	echo ""
+	printf "${YELLOW}##### Installing apache2 #####${NC}\n"
+		sudo apt install apache2
+	echo ""
+	printf "${YELLOW}##### php libapache2-mod-php php-mcrypt php-mysql #####${NC}\n"
+		sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql
+	echo ""
 	printf "${YELLOW}##### CLONING VISPA2 IN "$APPLICATIONS"${NC}\n"
 	#cloning Vispa2
 		cd $APPLICATIONS/scripts
 		sudo hg clone $link_vispa2
+	echo ""
+	printf "${YELLOW}##### integration_analysis IN "$APPLICATIONS"${NC}\n"
+	#cloning integration_analysis
+		sudo hg clone https://bitbucket.org/tigetbioinformatics/integration_analysis
 
 ###################### CONFIGURATION ######################
 
@@ -350,6 +360,12 @@
 	
 	echo "Python program link creation in /usr/bin"
 	echo "" 
+
+	sudo ln -s /opt/applications/scripts/vispa2/pipeline/illumina/VISPA2.IlluminaMiSeq.pipeline.sh /usr/bin/vispa2
+	sudo ln -s /opt/applications/scripts/vispa2/script/annotate_matrix_v2.sh /usr/bin/annotate_matrix
+	sudo ln -s /opt/applications/scripts/vispa2/script/annotate_bed.py /usr/bin/annotate_bed
+	sudo ln -s /opt/applications/scripts/integration_analysis/Integration_Analysis.py /usr/bin/create_matrix
+
 
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/import_iss"
 	sudo ln -s /opt/applications/scripts/vispa2/script/import_iss.py /usr/bin/import_iss
