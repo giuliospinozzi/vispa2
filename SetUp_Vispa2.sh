@@ -102,6 +102,15 @@
 
 		to_Download=`downloadFromUCSC $GENOME`
 		checkURL $to_Download
+
+		if [ ${GENOME:0:2} = "hg" ]; then
+			SPECIES="human";
+		else
+			if [ ${GENOME:0:2} = "mm" ]; then
+			SPECIES="mouse";
+			fi
+		fi
+		
 		file_name=`echo $to_Download | cut -d'/' -f 7` #[ex chromFa.tar.gz]
 		out_name=`echo $to_Download | cut -d'/' -f 5`  #[ex hg38]
 	
@@ -348,7 +357,7 @@
 	sudo ln -s /usr/bin/flexbar /usr/bin/flexbar2.5
 	sudo ln -s ${BIN}/trimmomatic /usr/bin/trimmomatic
 	sudo ln -s ${BIN}/FilterSamReads /usr/bin/FilterSamReads
-	sudo ln -s ${BIN}/MergeSamReads /usr/bin/MergeSamReads
+	sudo ln -s ${BIN}/MergeSamFiles /usr/bin/MergeSamFiles
 
 	# Python
 	# The following packages are required:
@@ -359,6 +368,7 @@
 
 	sudo -H pip install MySQL-python
 	sudo -H pip install pysam==0.7.7
+	sudo -H pip install pybedtools
 	sudo -H pip install biopython
 	sudo -H pip install HTSeq
 	sudo -H pip install rpy2
@@ -382,9 +392,9 @@
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/import_iss"
 	sudo ln -s /opt/applications/scripts/vispa2/script/import_iss.py /usr/bin/import_iss
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fqreverseextract.pureheader"
-	sudo ln -s /opt/applications/scripts/vispa2/script/fqreverseextract.pureheader.py /usr/bin/fqreverseextract.pureheader
+	sudo ln -s /opt/applications/scripts/vispa2/script/fqreverseextract.pureheader.py /usr/bin/fqreverseextract_pureheader
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fqextract.pureheader"
-	sudo ln -s /opt/applications/scripts/vispa2/script/fqextract.pureheader.py /usr/bin/fqextract.pureheader
+	sudo ln -s /opt/applications/scripts/vispa2/script/fqextract.pureheader.py /usr/bin/fqextract_pureheader
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/rev_extract_header"
 	sudo ln -s /opt/applications/scripts/vispa2/script/rev_extract_header.py /usr/bin/rev_extract_header
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/extract_header"
