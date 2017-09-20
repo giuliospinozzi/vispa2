@@ -201,12 +201,12 @@
 	printf "${YELLOW}##### php libapache2-mod-php php-mcrypt php-mysql #####${NC}\n"
 		sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql
 	echo ""
-	printf "${YELLOW}##### CLONING VISPA2 IN "$APPLICATIONS"${NC}\n"
+	printf "${YELLOW}##### CLONING VISPA2 IN "$APPLICATIONS"/scripts${NC}\n"
 	#cloning Vispa2
 		cd $APPLICATIONS/scripts
 		sudo hg clone $link_vispa2
 	echo ""
-	printf "${YELLOW}##### integration_analysis IN "$APPLICATIONS"${NC}\n"
+	printf "${YELLOW}##### integration_analysis IN "$APPLICATIONS"/scripts${NC}\n"
 	#cloning integration_analysis
 		sudo hg clone https://bitbucket.org/tigetbioinformatics/integration_analysis
 

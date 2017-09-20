@@ -82,7 +82,7 @@ LTR="${24}";
 LTR_rc="${25}";
 LC_fwd="${26}";
 LC_rev="${27}";
-SEQCONTAM="/opt/applications/scripts/VISPA2/vector/known.seqs.contaminants.tsv"
+SEQCONTAM="/opt/applications/scripts/vispa2/vector/known.seqs.contaminants.tsv"
 # suboptimal threshold set up
 SUBOPTIMALTHRESHOLD="${22}"
 
