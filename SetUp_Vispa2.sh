@@ -151,6 +151,9 @@
 	printf "${YELLOW}##### Installing parallel #####${NC}\n"
 		sudo apt-get install parallel
 	echo ""
+	printf "${YELLOW}##### Installing curl #####${NC}\n"
+		sudo apt-get install curl
+	echo ""
 	printf "${YELLOW}##### Installing fastqc #####${NC}\n"
 		#sudo apt-get install fastqc
 		curl -OL https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
@@ -199,9 +202,6 @@
 	echo ""
 	printf "${YELLOW}##### Installing bedtools #####${NC}\n"
 		sudo apt-get install bedtools
-	echo ""
-	printf "${YELLOW}##### Installing curl #####${NC}\n"
-		sudo apt-get install curl
 	echo ""
 	printf "${YELLOW}##### Installing mercurial #####${NC}\n"
 		sudo apt-get install mercurial
