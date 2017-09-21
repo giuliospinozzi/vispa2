@@ -216,6 +216,9 @@
 	printf "${YELLOW}##### Installing apache2 #####${NC}\n"
 		sudo apt install apache2
 	echo ""
+	printf "${YELLOW}##### Installing ruby #####${NC}\n"
+		sudo apt-get install ruby
+	echo ""
 	printf "${YELLOW}##### php libapache2-mod-php php-mcrypt php-mysql #####${NC}\n"
 		sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql
 	echo ""
@@ -277,7 +280,7 @@
 		echo ""
 		echo "File Concatenation..."
 		
-		chr_numer=`ls | grep -E "[[:digit:]].fa" | wc -l`
+		chr_numer=`ls -vI "*_*" | grep -E "chr[[:digit:]]" | wc -l`
 		
 		for i in $(seq 1 $chr_number); do
 			cat chr$i.fa >> $out_name.fa
@@ -370,7 +373,6 @@
 	echo ""
 
 	sudo -H pip install MySQL-python
-	sudo -H pip install pysam==0.7.7
 	sudo -H pip install pybedtools
 	sudo -H pip install biopython
 	sudo -H pip install HTSeq
@@ -380,6 +382,7 @@
 	sudo -H pip install matplotlib
 	sudo -H pip install xlsxwriter
 	sudo -H pip install pandas
+	sudo -H pip install pysam==0.7.7
 
 	cd $APPLICATIONS 																													#pwd ----> /opt/applications
 	
