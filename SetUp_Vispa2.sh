@@ -223,7 +223,7 @@
 	echo ""
 	printf "${YELLOW}##### CLONING integration_analysis IN "$APPLICATIONS"/scriptscre${NC}\n"
 	#cloning integration_analysis
-		sudo hg clone https://bitbucket.org/tigetbioinformatics/integration_analysis
+		sudo hg clone -b “2.1-seqTracker” https://bitbucket.org/tigetbioinformatics/integration_analysis
 	echo ""
 	printf "${YELLOW}#####  Installing dos2unix "$APPLICATIONS"/scriptscre${NC}\n"
 		sudo apt-get install dos2unix
@@ -386,7 +386,7 @@
 	sudo ln -s /opt/applications/scripts/vispa2/pipeline/illumina/VISPA2.IlluminaMiSeq.pipeline.sh /usr/bin/vispa2
 	sudo ln -s /opt/applications/scripts/vispa2/script/annotate_matrix_v2.sh /usr/bin/annotate_matrix
 	sudo ln -s /opt/applications/scripts/vispa2/script/annotate_bed.py /usr/bin/annotate_bed
-	sudo ln -s /opt/applications/scripts/integration_analysis/src/Integration_Analysis_main.py /usr/bin/create_matrix
+	sudo ln -s /opt/applications/scripts/integration_analysis/src/Integration_Analysis.py /usr/bin/create_matrix
 
 
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/import_iss"
