@@ -153,7 +153,7 @@
 	echo ""
 	printf "${YELLOW}##### Installing fastqc #####${NC}\n"
 		#sudo apt-get install fastqc
-		curl -Os https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
+		curl -OL https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
 		unzip fastqc_v0.11.5.zip
 		sudo mv FastQC fastqc
 		sudo mv fastqc /etc
@@ -168,7 +168,7 @@
 		sudo apt-get install samtools
 	echo ""
 	printf "${YELLOW}##### Installing trimmomatic #####${NC}\n"
-		curl -Os $link_trimmomatic
+		curl -OL $link_trimmomatic
 		unzip Trimmomatic-0.36.zip
 		cd Trimmomatic-0.36																										#pwd ----> /opt/applications/trimmomatic-0.36
 		mkdir -p ${BIN}
@@ -181,6 +181,9 @@
 	echo ""
 	printf "${YELLOW}##### Installing flexbar #####${NC}\n"
 		sudo apt-get install flexbar
+	echo ""
+	printf "${YELLOW}##### Installing fastx-toolkit #####${NC}\n"
+		sudo apt-get install fastx-toolkit
 	echo ""
 	printf "${YELLOW}##### Installing bamtools #####${NC}\n"
 		sudo apt-get install bamtools
@@ -411,5 +414,6 @@
 	echo "link from /opt/applications/scripts/vispa2/script in /usr/bin/fasta_to_csv"
 	sudo chmod +x /opt/applications/scripts/vispa2/script/fasta_to_csv.rb
 	sudo ln -s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta_to_csv
+	sudo ln -s /opt/applications/scripts/vispa2/script/fasta_to_csv.rb /usr/bin/fasta2csv
 
 echo "Set up Completed!"
