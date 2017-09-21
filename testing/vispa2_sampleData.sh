@@ -3,6 +3,7 @@ source /etc/environment
 source /etc/profile
 
 PROJECT="VISPA2-test-CEM";
+VISPA2_HOME="/opt/applications/scripts/vispa2"
 
 echo "
         +--------------------------------------------------------+
@@ -26,26 +27,27 @@ TODAY=`date +"%Y%m%d%H%M%S"`;
 
 ##### ========================= Parameters to Check ========================= #####
 
-R1="/opt/applications/scripts/vispa2/testing/sampledata/AssayValidation_R1.fastq.gz";
-R2="/opt/applications/scripts/vispa2/testing/sampledata/AssayValidation_R2.fastq.gz";
+R1="${VISPA2_HOME}/testing/sampledata/AssayValidation_R1.fastq.gz";
+R2="${VISPA2_HOME}/testing/sampledata/AssayValidation_R2.fastq.gz";
 
-DISEASE="VISPA2"; # project main name: nota, se vuoi aggiungere i nuovi dati a risultati precedenti, scrivi lo STESSO nome
-PATIENT="sample_data"; # se esiste metti il paziente, se no ricopia il nome del progetto
-POOLNAME="CEM_dNEF"; # nome della cartella contenente i dettagli di questo run (all'interno di ogni cartella primaria, come bam, bed, ecc)
+# the file system tree folder will be as follows: DISEASE -> PATIENT -> {bam, bcmultx, iss, quality, bed, quantification} -> POOLNAME
+DISEASE="VISPA2"; # project main name: for example the disease or the reference project ID
+PATIENT="sampledata"; # place here a patient ID, or an experiment ID
+POOLNAME="testcase"; # the sequencing pool ID 
 
 GENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa"; ## hg19: /opt/genome/human/hg19/index/bwa_7/hg19.fa ; mm9: /opt/genome/mouse/mm9/index/bwa_7/mm9.fa ; mfa5: /opt/genome/monkey/mfa5/index/bwa_7/mfa5.fa
-BARCODE_LTR="/opt/applications/scripts/vispa2/elements/barcode/barcode.LTR.48.list";
-BARCODE_LC="/opt/applications/scripts/vispa2/elements/barcode/barcode.LC.48.list";
+BARCODE_LTR="${VISPA2_HOME}/elements/barcode/barcode.LTR.48.list";
+BARCODE_LC="${VISPA2_HOME}/elements/barcode/barcode.LC.48.list";
 
-ASSOCIATIONFILE="/opt/applications/scripts/vispa2/testing/sampledata/AssayValidation.tsv";  # https://www.dropbox.com/s/6slo4l8g9i8sk3s/association%20file%20template.xlsx
-LTR="/opt/applications/scripts/vispa2/elements/sequences/LTR.32bp.fa"; # LTR in forward
-LTR_rc="/opt/applications/scripts/vispa2/elements/sequences/LTR.32bp.rev.fa"; # LTR in reverse complement
-LC_fwd="/opt/applications/scripts/vispa2/elements/sequences/LC.assayvalidation.fwd.fa"; # Linker Cassette in forward
-LC_rev="/opt/applications/scripts/vispa2/elements/sequences/LC.assayvalidation.rc.fa"; # Linker Cassette in reverse
+ASSOCIATIONFILE="${VISPA2_HOME}/testing/sampledata/AssayValidation.tsv";  # https://www.dropbox.com/s/6slo4l8g9i8sk3s/association%20file%20template.xlsx
+LTR="${VISPA2_HOME}/elements/sequences/LTR.32bp.fa"; # LTR in forward
+LTR_rc="${VISPA2_HOME}/elements/sequences/LTR.32bp.rev.fa"; # LTR in reverse complement
+LC_fwd="${VISPA2_HOME}/elements/sequences/LC.assayvalidation.fwd.fa"; # Linker Cassette in forward
+LC_rev="${VISPA2_HOME}/elements/sequences/LC.assayvalidation.rc.fa"; # Linker Cassette in reverse
 
-DBHOSTID="local"; ## lascia pure questo se vuoi scrivere il tutto su gemini
+DBHOSTID="local"; ## lkeywords, to keed as it is for localhost. Otherwise please change also the program import_iss_from_bed
 DBTARGETSCHEMA="review_VISPA2";
-DBTARGETTABLE="CEMdNEF";
+DBTARGETTABLE="testcase";
 
 REPEATS="repeats_no";
 GATKREFGENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa"; # riportare lo stesso file del genoma GENOME:: hg19: /opt/genome/human/hg19/index/bwa_7/hg19.fa ; mm9: /opt/genome/mouse/mm9/index/bwa_7/mm9.fa ; mfa5: /opt/genome/monkey/mfa5/index/bwa_7/mfa5.fa hiv: /opt/genome/hiv/hiv_hxb2cg/bwa_7/hiv.fa
@@ -53,7 +55,7 @@ CIGARGENOMEID="hg19" ; # Reference genome ID: choose among {hg19 | mm9 | mfa5}
 VECTORCIGARGENOMEID="lv"; ## This is the vector reference name (id) used to remove vector sequences. Choose among: {lv, lvarsa, lvwas, lvkana, lvamp, transposon, giada, hiv}
 LVGENOME="/opt/genome/vector/lv/bwa_7/lv.backbone.fa"; # Change it ONLY if you want to quantify and remove other vectors or inserted sequences. Alternatives in the GEMINI folder /opt/genome/vector/lv/bwa_7/: {lv.backbone.fa, lv.backbone.hpgk.arsa.wprem.fa, lv.backbone.wasp.was.wprem.fa, lv.plasmid.amp.fa, lv.plasmid.kana.fa}. HIV: /opt/genome/hiv/hiv_hxb2cg/bwa_7/hiv.fa
 PHIXGENOME="/opt/genome/control/phix174/bwa_7/phiX174.fa";
-CONTAMINANTDB="/opt/applications/scripts/vispa2/elements/sequences/UniVec_Tiget.fa"; # con lo stesso path, le alternative sono: {UniVec_Tiget_Gamma.fa, UniVec.2013.TIGET.LV.ARSA.fa, UniVec.2013.TIGET.LV.WAS.fa}
+CONTAMINANTDB="${VISPA2_HOME}/elements/sequences/UniVec_Tiget.fa"; # con lo stesso path, le alternative sono: {UniVec_Tiget_Gamma.fa, UniVec.2013.TIGET.LV.ARSA.fa, UniVec.2013.TIGET.LV.WAS.fa}
 
 ## Computational Parameters
 CPUN="`cat /proc/cpuinfo | grep "model name" | wc -l`";
@@ -103,21 +105,21 @@ date;
 #---------------------------------------***---------------------------------------#
 
 
-echo "
-        +--------------------------------------------------------+
-        |                                                        |
-        |                  VISPA2 (Create Matrix)                |
-        |                                                        |
-        +--------------------------------------------------------+
-        |  Author:   Giulio Spinozzi, PostDoc                    |
-        |  Date:     Sept 2017                                   |
-        |  Version:  1.0                                         |  
-        |  Contact:  spinozzi.giulio@hsr.it                      |
-        +--------------------------------------------------------+
+# echo "
+#         +--------------------------------------------------------+
+#         |                                                        |
+#         |                  VISPA2 (Create Matrix)                |
+#         |                                                        |
+#         +--------------------------------------------------------+
+#         |  Author:   Giulio Spinozzi, PostDoc                    |
+#         |  Date:     Sept 2017                                   |
+#         |  Version:  1.0                                         |  
+#         |  Contact:  spinozzi.giulio@hsr.it                      |
+#         +--------------------------------------------------------+
 
-        >PROJECT: ${PROJECT}
+#         >PROJECT: ${PROJECT}
 
-"
+# "
 
 
 TODAY=`date +"%Y%m%d%H%M%S"`;
@@ -125,23 +127,24 @@ TODAY=`date +"%Y%m%d%H%M%S"`;
 
 create_matrix --dbDataset "review_VISPA2.CEMdNEF" --columns tissue,sample,treatment,vector,enzyme --IS_method classic --bp_rule 7 --tsv --no_xlsx
 
-echo "
-        +--------------------------------------------------------+
-        |                                                        |
-        |                VISPA2 (Annotate Matrix)                |
-        |                                                        |
-        +--------------------------------------------------------+
-        |  Author:   Giulio Spinozzi, PostDoc                    |
-        |  Date:     Sept 2017                                   |
-        |  Version:  1.0                                         |  
-        |  Contact:  spinozzi.giulio@hsr.it                      |
-        +--------------------------------------------------------+
+# echo "
+#         +--------------------------------------------------------+
+#         |                                                        |
+#         |                VISPA2 (Annotate Matrix)                |
+#         |                                                        |
+#         +--------------------------------------------------------+
+#         |  Author:   Giulio Spinozzi, PostDoc                    |
+#         |  Date:     Sept 2017                                   |
+#         |  Version:  1.0                                         |  
+#         |  Contact:  spinozzi.giulio@hsr.it                      |
+#         +--------------------------------------------------------+
 
-        >PROJECT: ${PROJECT}
+#         >PROJECT: ${PROJECT}
 
-"
+# "
 
 
 TODAY=`date +"%Y%m%d%H%M%S"`;
 
 annotate_matrix -m IS_matrix_classic_strand_specific_method_review_VISPA2_CEMdNEF.tsv -g /opt/genome/human/hg19/annotation/ucsc.hg19.refSeq.gtf -o . -t vispa
+
