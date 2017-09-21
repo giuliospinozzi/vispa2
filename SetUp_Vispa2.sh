@@ -223,7 +223,7 @@
 	echo ""
 	printf "${YELLOW}##### CLONING integration_analysis IN "$APPLICATIONS"/scriptscre${NC}\n"
 	#cloning integration_analysis
-		sudo hg clone -b “2.1-seqTracker” https://bitbucket.org/tigetbioinformatics/integration_analysis
+		sudo hg clone -b "2.1-seqTracker" https://bitbucket.org/tigetbioinformatics/integration_analysis
 	echo ""
 	printf "${YELLOW}#####  Installing dos2unix "$APPLICATIONS"/scriptscre${NC}\n"
 		sudo apt-get install dos2unix
