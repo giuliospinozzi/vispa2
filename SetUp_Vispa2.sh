@@ -209,6 +209,7 @@
 	printf "${YELLOW}##### Installing pip #####${NC}\n"
 		sudo apt-get install python-pip
 		sudo pip install --upgrade pip
+		sudo -H pip2 install --upgrade pip
 	echo ""
 	printf "${YELLOW}##### Installing libmysqlclient-dev #####${NC}\n"
 		sudo apt-get install libmysqlclient-dev
@@ -234,7 +235,7 @@
 	printf "${YELLOW}#####  Installing dos2unix "$APPLICATIONS"/scriptscre${NC}\n"
 		sudo apt-get install dos2unix
 		cd integration_analysis/src/
-		for i in `ls`; do dos2unix $i ; done
+		for i in `ls`; do sudo dos2unix $i ; done
 		cd $APPLICATIONS/scripts
 
 ###################### CONFIGURATION ######################
