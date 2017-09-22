@@ -125,7 +125,7 @@ date;
 TODAY=`date +"%Y%m%d%H%M%S"`;
 
 
-create_matrix --dbDataset "review_VISPA2.CEMdNEF" --columns tissue,sample,treatment,vector,enzyme --IS_method classic --bp_rule 7 --tsv --no_xlsx
+create_matrix --dbDataset "${DBTARGETSCHEMA}.${DBTARGETTABLE}" --columns tissue,sample,treatment,vector,enzyme --IS_method classic --bp_rule 7 --tsv --no_xlsx
 
 # echo "
 #         +--------------------------------------------------------+
