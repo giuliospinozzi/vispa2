@@ -87,23 +87,23 @@ if [ -z "$METHOD" ]; then
 fi
 
 ## Space
-LEFTSPACE=`df -P ${OUTDIR} | tail -1 | awk '{print $4}'`
-if [ ${LEFTSPACE} -lt 100000000 ]; then 
-    echo "
+# LEFTSPACE=`df -P ${OUTDIR} | tail -1 | awk '{print $4}'`
+# if [ ${LEFTSPACE} -lt 100000000 ]; then 
+#     echo "
     
-        *****************************************************************
-        |                                                               |
-        |   YOU DO NOT HAVE ENOUGH SPACE LEFT ON HARD DISK!!            |
-        |                                                               |
-        |   I WILL NOT PROCEED...                                       |
-        |                                                               |       
-        |   FREE SPACE BEFORE, LEAVING AT LEAST 100GB ON WD             |
-        |                                                               |
-        *****************************************************************
+#         *****************************************************************
+#         |                                                               |
+#         |   YOU DO NOT HAVE ENOUGH SPACE LEFT ON HARD DISK!!            |
+#         |                                                               |
+#         |   I WILL NOT PROCEED...                                       |
+#         |                                                               |       
+#         |   FREE SPACE BEFORE, LEAVING AT LEAST 100GB ON WD             |
+#         |                                                               |
+#         *****************************************************************
     
-        "; 
-    exit;
-fi
+#         "; 
+#     exit;
+# fi
 #=================================================================================#
 
 
