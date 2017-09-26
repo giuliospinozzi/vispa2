@@ -146,5 +146,5 @@ create_matrix --dbDataset "${DBTARGETSCHEMA}.${DBTARGETTABLE}" --columns tissue,
 
 TODAY=`date +"%Y%m%d%H%M%S"`;
 
-annotate_matrix -m IS_matrix_classic_strand_specific_method_review_VISPA2_CEMdNEF.tsv -g /opt/genome/human/hg19/annotation/ucsc.hg19.refSeq.gtf -o . -t vispa
+annotate_matrix -m IS_matrix_classic_strand_specific_method_review_VISPA2_testcase.tsv -g /opt/applications/scripts/vispa2/annotation/ucsc.hg19.refSeq.gtf.tar.gz -o . -t vispa
 
