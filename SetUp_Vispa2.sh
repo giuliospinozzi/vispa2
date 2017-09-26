@@ -281,7 +281,7 @@
 		echo ""
 		echo "File Concatenation..."
 		
-		chr_numer=`ls -vI "*_*" | grep -E "chr[[:digit:]]" | wc -l`
+		chr_number=`ls -vI "*_*" | grep -E "chr[[:digit:]]" | wc -l`
 		
 		for i in $(seq 1 $chr_number); do
 			cat chr$i.fa >> $out_name.fa
