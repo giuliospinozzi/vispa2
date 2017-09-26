@@ -24,9 +24,9 @@ An easy configuration script will support the installation of the pipeline VISPA
 ```
 cd vispa2
 # get help from the configuration file
-./SetUp_Vispa2.sh -h
-# run the installation and configuration of the required tools and download the genome(s), here hg19 and mm10 (this option will also index the reference genome). The script exploits reference genomee common names, as reported in UCSC web site http://hgdownload.soe.ucsc.edu/downloads.html#mouse. Please, enable internet network connections to UCSC web site.
-./SetUp_Vispa2.sh -s -g hg19,mm10
+./config_vispa2.sh -h
+# run the installation and configuration of the required tools and download the genome(s), here hg19 (this option will also index the reference genome). The script exploits reference genome common names, as reported in UCSC web site http://hgdownload.soe.ucsc.edu/downloads.html#mouse. Please, enable internet network connections to UCSC web site.
+./config_vispa2.sh -s human -i hg19
 ```
 
 Details for the configuration and running:
