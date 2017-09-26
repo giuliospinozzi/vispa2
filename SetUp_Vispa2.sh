@@ -176,7 +176,7 @@
 		cd Trimmomatic-0.36																										#pwd ----> /opt/applications/trimmomatic-0.36
 		mkdir -p ${BIN}
 		echo '#!/bin/bash' > ${BIN}/trimmomatic
-		echo 'java -jar '${APPLICATIONS}'/Trimmomatic-0.36/trimmomatic-0.36.jar $@' >> ${BIN}/trimmomatic
+		echo "java -jar '${APPLICATIONS}'/Trimmomatic-0.36/trimmomatic-0.36.jar \$@" >> ${BIN}/trimmomatic
 		chmod +x ${BIN}/trimmomatic
 	echo ""
 	printf "${YELLOW}##### Installing ea-utils #####${NC}\n"
@@ -358,8 +358,13 @@
 	echo "STEP 4: SOFTWARE CONFIGURATION"
 	echo ""
 
-	echo 'export LD_LIBRARY_PATH=/path/FlexbarDir:$LD_LIBRARY_PATH' >> ~/.bashrc
-	source ~/.bashrc
+	if grep -Rq "LD_LIBRARY_PATH=/path/FlexbarDir:" /home/`whoami`/.bashrc ; then 
+		echo "Flexbar path founded in ./bashrc"; 
+	else 
+		echo "code is not found" 
+		echo 'export LD_LIBRARY_PATH=/path/FlexbarDir:$LD_LIBRARY_PATH' >> ~/.bashrc
+		source ~/.bashrc ;
+	fi
 	
 	sudo ln -s /usr/bin/flexbar /usr/bin/flexbar2.5
 	sudo ln -s ${BIN}/trimmomatic /usr/bin/trimmomatic
