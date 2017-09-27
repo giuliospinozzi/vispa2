@@ -28,15 +28,21 @@
 
 	function checkURL() {
 
-		#check if the link exist
-		status=`curl -s --head -w %{http_code} $1 -o /dev/null`
-		
-		if [[ $status == "200" ]]; then
-			 echo "This URL Exist"
+		if [[ `dpkg -s curl 2> /dev/null | wc -l` > 0 ]]; then
+			status=`curl -s --head -w %{http_code} $1 -o /dev/null`
+			#check if the link exist
+			if [[ $status == "200" ]]; then
+				echo "This URL Exist"
+			else
+				echo "This URL Not Exist"
+				echo "Check the option -i used. Visit the link http://hgdownload.soe.ucsc.edu/goldenPath/ to search the right Keyword like hg19-mm10-mm9..."
+				exit -1
+			fi
 		else
-		    echo "This URL Not Exist"
-		    echo "Check the option -i used. Visit the link http://hgdownload.soe.ucsc.edu/goldenPath/ to search the right Keyword like hg19-mm10-mm9..."
-		    exit -1
+			printf "[ ${RED}CURL NOT FOUND${NC} ] curl not installed\n"
+			echo Download...
+			sudo apt-get install curl
+			checkURL $to_Download
 		fi
 	}
 
