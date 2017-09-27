@@ -316,6 +316,7 @@
 	#file annotation step
 	cd ${VISPA2}/annotation
 	tar -xvzf ucsc.hg19.refSeq.gtf.tar.gz
+	sudo mv hg19.refGene.TIGET.gtf ucsc.hg19.refSeq.gtf
 	
 	if [ -z $to_Download ]; then
 		echo "No Genome will be downloaded, SKIP to step 4..."
