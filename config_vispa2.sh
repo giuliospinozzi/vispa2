@@ -61,15 +61,9 @@
 	function checkAllPacks () {
 
 		echo "@  Checking if all pack are installed"
-		list_dependencies=(mysql-server fastqc trimmomatic pigz parallel curl bwa samtools ea-utils flexbar fastx-toolkit bamtools picard-tools bedtools mercurial python-pip libmysqlclient-dev apache2 ruby php libapache2-mod-php php-mcrypt php-mysql dos2unix)
+		list_dependencies=(mysql-server pigz parallel curl bwa samtools ea-utils flexbar fastx-toolkit bamtools picard-tools bedtools mercurial python-pip libmysqlclient-dev apache2 ruby php libapache2-mod-php php-mcrypt php-mysql dos2unix)
 		for i in ${list_dependencies[@]}; do
-			if [[( $i == "trimmomatic" && -a /opt/applications/bin/trimmomatic && -a /usr/bin/trimmomatic )]]; then
-				printf "[ ${GREEN}OK${NC} ] $i installed correctly in /opt/applications/\n"
-				continue
-			elif [[( $i == "fastqc" && -a /etc/fastqc/fastqc && -a /usr/bin/fastqc )]]; then
-				printf "[ ${GREEN}OK${NC} ] $i installed correctly in /etc/fastqc/\n"
-				continue
-			elif [[ `dpkg -s $i 2> /dev/null | wc -l` > 0 ]]; then
+			if [[ `dpkg -s $i 2> /dev/null | wc -l` > 0 ]]; then
 				printf "[ ${GREEN}OK${NC} ] $i installed correctly\n"
 			else
 				printf "[ ${RED}MISSING${NC} ] $i not installed correctly\n"
@@ -201,7 +195,7 @@
 	#create folder if not exist
 	sudo mkdir -p ${APPLICATIONS}/scripts
 	sudo chmod -R 777 ${APPLICATIONS}
-	cd ${APPLICATIONS}																		#pwd ----> /opt/applications/
+	sudo cd ${APPLICATIONS}																		#pwd ----> /opt/applications/
 
 	for i in "${list_dependencies[@]}"; do 
 		
@@ -209,20 +203,20 @@
 
 		if [[ $i == "fastqc" ]]; then
 
-			cd ${APPLICATIONS}
+			sudo cd ${APPLICATIONS}
 			if [[( -a /etc/fastqc/fastqc && -a /usr/bin/fastqc )]]; then
 				printf "[ ${GREEN}OK${NC} ] Fastqc already exists\n"
 				sudo chmod +x /etc/fastqc/fastqc > /dev/null
 				continue
 			else
 				printf "[ ${RED}NO${NC} ] Fastqc not found, Installing ${i}\n"
-				sudo apt-get install curl
+				sudo apt-get install curl 2> /dev/null
 				sudo curl -OL $__fastqc 
 				unzip fastqc_v0.11.5.zip > /dev/null
 				sudo mv FastQC fastqc 2> /dev/null
 				sudo mv fastqc /etc 2> /dev/null
 				sudo chmod +x /etc/fastqc/fastqc
-				ln -s /etc/fastqc/fastqc /usr/bin/fastqc 2> /dev/null
+				sudo ln -sf /etc/fastqc/fastqc /usr/bin/fastqc 2> /dev/null
 			fi
 		elif [[ $i == "trimmomatic" ]]; then
 
@@ -440,10 +434,10 @@
 	echo "STEP 5: PYTHON CONFIGURATION"
 	echo ""
 
-	listPypack=(MySQL-python pybedtools biopython HTSeq rpy2 scipy numpy matplotlib xlsxwriter pandas pysam==0.7.7)
+	listPypack=(MySQL-python pybedtools biopython HTSeq rpy2==2.7.8 scipy numpy matplotlib xlsxwriter pandas pysam==0.7.7)
 	for i in ${listPypack[@]}; do
 		printf "[ ${GREEN}add python pack${NC} ] python pack ${i}\n" 
-		installPyPack "$i" 
+		installPyPack "$i"
 	done
 
 	cd $APPLICATIONS 																													#pwd ----> /opt/applications
