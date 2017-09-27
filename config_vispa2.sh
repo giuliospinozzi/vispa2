@@ -313,6 +313,9 @@
 	echo "STEP 3: Download Genome"
 	echo ""
 
+	#file annotation step
+	cd ${VISPA2}/annotation
+	tar -xvzf ucsc.hg19.refSeq.gtf.tar.gz
 	
 	if [ -z $to_Download ]; then
 		echo "No Genome will be downloaded, SKIP to step 4..."
@@ -354,8 +357,8 @@
 		cd ${FOLDERGENOME}/annotation																											#pwd ----> /opt/genome/species/type/annotation
 		
 		if [[ $out_name == "hg19" ]]; then
-			cp ${VISPA2}/annotation/ucsc.$out_name.refSeq.gtf.tar.gz .
-			tar -xvzf ${FOLDERGENOME}/annotation/ucsc.$out_name.refSeq.gtf.tar.gz
+			cp ${VISPA2}/annotation/ucsc.hg19.refSeq.gtf.tar.gz .
+			tar -xvzf ${FOLDERGENOME}/annotation/ucsc.hg19.refSeq.gtf.tar.gz
 		else
 			cp ${VISPA2}/annotation/ucsc.$out_name.refSeq.gtf.gz .
 			gunzip ${FOLDERGENOME}/annotation/ucsc.$out_name.refSeq.gtf.gz
