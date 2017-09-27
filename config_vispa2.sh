@@ -195,7 +195,7 @@
 	#create folder if not exist
 	sudo mkdir -p ${APPLICATIONS}/scripts
 	sudo chmod -R 777 ${APPLICATIONS}
-	sudo cd ${APPLICATIONS}																		#pwd ----> /opt/applications/
+	cd ${APPLICATIONS}																		#pwd ----> /opt/applications/
 
 	for i in "${list_dependencies[@]}"; do 
 		
@@ -203,7 +203,7 @@
 
 		if [[ $i == "fastqc" ]]; then
 
-			sudo cd ${APPLICATIONS}
+			cd ${APPLICATIONS}
 			if [[( -a /etc/fastqc/fastqc && -a /usr/bin/fastqc )]]; then
 				printf "[ ${GREEN}OK${NC} ] Fastqc already exists\n"
 				sudo chmod +x /etc/fastqc/fastqc > /dev/null
@@ -259,10 +259,10 @@
 			fi
 		elif [[ $i == "bedtools" ]]; then
 			cd ${APPLICATIONS}
-			sudo apt-get purge bedtools > /dev/null
-			curl https://github.com/arq5x/bedtools2/releases/download/v2.18.0/bedtools-2.18.0.tar.gz
+			sudo apt-get purge bedtools
+			curl -OL https://github.com/arq5x/bedtools2/releases/download/v2.18.0/bedtools-2.18.0.tar.gz
 			tar -xvzf bedtools-2.18.0.tar.gz
-			sudo cd bedtools-2.18.0
+			cd bedtools-2.18.0
 			sudo make > /dev/null
 			for i in `ls bin/`; do sudo ln -sf ${APPLICATIONS}/bedtools-2.18.0/bin/$i /usr/bin/$i; done
 		else
