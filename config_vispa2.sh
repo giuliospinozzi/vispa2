@@ -217,7 +217,7 @@
 				sudo mv fastqc /etc 2> /dev/null
 				sudo chmod +x /etc/fastqc/fastqc
 				sudo ln -sf /etc/fastqc/fastqc /usr/bin/fastqc 2> /dev/null
-			fi
+			fi	
 		elif [[ $i == "trimmomatic" ]]; then
 
 			cd ${APPLICATIONS}
@@ -257,6 +257,14 @@
 				installDepend "mercurial" > /dev/null
 				hg clone -b "2.1-seqTracker" $__integration_analysis 2> /dev/null
 			fi
+		elif [[ $i == "bedtools" ]]; then
+			cd ${APPLICATIONS}
+			sudo apt-get purge bedtools > /dev/null
+			curl https://github.com/arq5x/bedtools2/releases/download/v2.18.0/bedtools-2.18.0.tar.gz
+			tar -xvzf bedtools-2.18.0.tar.gz
+			sudo cd bedtools-2.18.0
+			sudo make > /dev/null
+			for i in `ls bin/`; do sudo ln -sf ${APPLICATIONS}/bedtools-2.18.0/bin/$i /usr/bin/$i; done
 		else
 			if [[ `dpkg -s $i 2> /dev/null | wc -l ` > 0 ]]; then
 				printf "[ ${GREEN}OK${NC} ] $i already exists\n"
