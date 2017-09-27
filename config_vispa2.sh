@@ -360,6 +360,7 @@
 		if [[ $out_name == "hg19" ]]; then
 			cp ${VISPA2}/annotation/ucsc.hg19.refSeq.gtf.tar.gz .
 			tar -xvzf ${FOLDERGENOME}/annotation/ucsc.hg19.refSeq.gtf.tar.gz
+			sudo mv hg19.refGene.TIGET.gtf ucsc.hg19.refSeq.gtf
 		else
 			cp ${VISPA2}/annotation/ucsc.$out_name.refSeq.gtf.gz .
 			gunzip ${FOLDERGENOME}/annotation/ucsc.$out_name.refSeq.gtf.gz
