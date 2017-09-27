@@ -347,9 +347,9 @@
 		printf "[ ${GREEN}CONTATENATION COMPLETE${NC} ]\n"
 		echo ""
 		echo "Removing extracted chr files...."
-		mv $file_name ../
-		rm chr*
-		mv ../$file_name ${FOLDERGENOME}
+		sudo mv $file_name ../
+		sudo rm chr*
+		sudo mv ../$file_name ${FOLDERGENOME}
 		echo ""
 		cd ${FOLDERGENOME}/annotation																											#pwd ----> /opt/genome/species/type/annotation
 		
