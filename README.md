@@ -18,14 +18,19 @@ Vector Integration Site Parallel Analysis, Version 2.
 
 ## How do I get set up? ##
 
-The full research article reports a short manual for tool installation and configuration.
-An easy configuration script will support the installation of the pipeline VISPA2. Use the following command line statement that will guide you through the installation and set up (as root user):
+The full research article describes the software and its procecures.
+
+An easy configuration script will support users in the process of installation of VISPA2. Use the following command line statement that will guide you through the installation and set up (as root user):
 
 ```
 cd vispa2
 # get help from the configuration file
 ./config_vispa2.sh -h
-# run the installation and configuration of the required tools and download the genome(s), here hg19 (this option will also index the reference genome). The script exploits reference genome common names, as reported in UCSC web site http://hgdownload.soe.ucsc.edu/downloads.html#mouse. Please, enable internet network connections to UCSC web site.
+# run the installation and configuration of the required tools and download the genome(s), 
+# here hg19 (this option will also index the reference genome). 
+# The script exploits reference genome common names, as reported in UCSC web 
+# site http://hgdownload.soe.ucsc.edu/downloads.html#mouse. 
+# Please, enable internet network connections to UCSC web site.
 ./config_vispa2.sh -s human -i hg19
 ```
 
