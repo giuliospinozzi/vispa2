@@ -402,6 +402,16 @@
 	sudo cp -r /opt/applications/scripts/vispa2/genomes/phix/bwa7/* /opt/genome/control/phix174/bwa_7/
 	sudo cp -r /opt/applications/scripts/vispa2/genomes/lv/bwa_7/* /opt/genome/vector/lv/bwa_7/
 	sudo cp -r /opt/applications/scripts/vispa2/genomes/alu/* /opt/genome/vector/alu/
+
+	sudo cd /opt/genome/vector/lv/bwa_7/
+
+	for k in $( ls *.fa ) ; do 
+		INAME=`basename $k | sed 's/.fa//g'`; 
+		echo $INAME; 
+		bwa index $k; 
+		samtools faidx $k; 
+		picard-tools CreateSequenceDictionary R=${k} O=${INAME}.dict; 
+	done
 ###################### DATABASE CONFIGURATION ######################
 
 	#VISPA2 uses MySQL as DBMS.

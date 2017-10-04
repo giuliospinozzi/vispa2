@@ -319,7 +319,7 @@ for PLASMID in kana amp; do
 	# rm ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sam
 	
 	### NEW version (without sam output)
-	bwa-stable mem -k 14 -r 1 -T 15 -c 1 -t ${MAXTHREADS} /opt/genome/vector/plasmid/plasmids.${PLASMID}.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 20 -uS - | samtools sort - ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted
+	bwa-stable mem -k 14 -r 1 -T 15 -c 1 -t ${MAXTHREADS} /opt/genome/vector/lv/bwa_7/lv.plasmid.${PLASMID}.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 20 -uS - | samtools sort - ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted
 	
 	# fastqc -o ${OUTDIR_POOL_QUAL} --contaminants ${SEQCONTAM} -t ${MAXTHREADS} -f bam ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.${PLASMID}.merge.bam
 	samtools view ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted.bam | cut -f1 > ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.list
