@@ -54,7 +54,7 @@ GATKREFGENOME="/opt/genome/human/hg19/index/bwa_7/hg19.fa"; # riportare lo stess
 CIGARGENOMEID="hg19" ; # Reference genome ID: choose among {hg19 | mm9 | mfa5}
 VECTORCIGARGENOMEID="lv"; ## This is the vector reference name (id) used to remove vector sequences. Choose among: {lv, lvarsa, lvwas, lvkana, lvamp, transposon, giada, hiv}
 LVGENOME="/opt/genome/vector/lv/bwa_7/lv.backbone.fa"; # Change it ONLY if you want to quantify and remove other vectors or inserted sequences. Alternatives in the GEMINI folder /opt/genome/vector/lv/bwa_7/: {lv.backbone.fa, lv.backbone.hpgk.arsa.wprem.fa, lv.backbone.wasp.was.wprem.fa, lv.plasmid.amp.fa, lv.plasmid.kana.fa}. HIV: /opt/genome/hiv/hiv_hxb2cg/bwa_7/hiv.fa
-PHIXGENOME="/opt/applications/scripts/vispa2/genomes/phix/bwa7/phiX174.fa";
+PHIXGENOME="/opt/genome/control/phix174/bwa_7/phiX174.fa";
 CONTAMINANTDB="${VISPA2_HOME}/elements/sequences/UniVec_Tiget.fa"; # con lo stesso path, le alternative sono: {UniVec_Tiget_Gamma.fa, UniVec.2013.TIGET.LV.ARSA.fa, UniVec.2013.TIGET.LV.WAS.fa}
 
 ## Computational Parameters

@@ -396,6 +396,12 @@
 	printf "[ ${BLUE}new folder${NC} ] Folders creation --> "${PATHGENOME}"/control/phix${NC}\n"
 	sudo mkdir -p ${PATHGENOME}/control/phix 2> /dev/null
 
+	sudo mkdir -p /opt/genome/control/phix174/bwa_7/
+	sudo mkdir -p /opt/genome/vector/lv/bwa_7/
+	sudo mkdir -p /opt/genome/vector/alu/
+	sudo cp /opt/applications/scripts/vispa2/genomes/phix/bwa7/* /opt/genome/control/phix174/bwa_7/
+	sudo cp /opt/applications/scripts/vispa2/genomes/lv/bwa_7/* /opt/genome/vector/lv/bwa_7/
+	sudo cp /opt/applications/scripts/vispa2/genomes/alu/* /opt/genome/vector/alu/
 ###################### DATABASE CONFIGURATION ######################
 
 	#VISPA2 uses MySQL as DBMS.
