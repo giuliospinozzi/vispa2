@@ -407,9 +407,10 @@
 
 	for k in $( ls *.fa ) ; do 
 		INAME=`basename $k | sed 's/.fa//g'`; 
-		echo $INAME; 
-		bwa index $k; 
-		samtools faidx $k; 
+		echo $INAME;
+		sudo rm ${INAME}.dict
+		bwa-stable index $k; 
+		samtools faidx $k;
 		picard-tools CreateSequenceDictionary R=${k} O=${INAME}.dict; 
 	done
 ###################### DATABASE CONFIGURATION ######################
