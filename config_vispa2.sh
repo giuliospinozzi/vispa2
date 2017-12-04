@@ -509,5 +509,8 @@
 	sudo chmod +x ${SCRIPT}/fasta_to_csv.rb
 	sudo ln -sf ${SCRIPT}/fasta_to_csv.rb /usr/bin/fasta_to_csv 2> /dev/null
 	sudo ln -sf ${SCRIPT}/fasta_to_csv.rb /usr/bin/fasta2csv 2> /dev/null
+	
+	sudo cd /opt
+	sudo chmod -R 775 ./*   
 
 printf "[ ${GREEN}SET UP COMPLETED!${NC} ] your machine is ready to vispa2!\n"
