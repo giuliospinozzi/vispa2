@@ -403,7 +403,7 @@
 	sudo cp -r /opt/applications/scripts/vispa2/genomes/lv/bwa_7/* /opt/genome/vector/lv/bwa_7/
 	sudo cp -r /opt/applications/scripts/vispa2/genomes/alu/* /opt/genome/vector/alu/
 
-	sudo cd /opt/genome/vector/lv/bwa_7/
+	cd /opt/genome/vector/lv/bwa_7/
 
 	for k in $( ls *.fa ) ; do 
 		INAME=`basename $k | sed 's/.fa//g'`; 
@@ -510,7 +510,7 @@
 	sudo ln -sf ${SCRIPT}/fasta_to_csv.rb /usr/bin/fasta_to_csv 2> /dev/null
 	sudo ln -sf ${SCRIPT}/fasta_to_csv.rb /usr/bin/fasta2csv 2> /dev/null
 	
-	sudo cd /opt
+	cd /opt
 	sudo chmod -R 775 ./*   
 
 printf "[ ${GREEN}SET UP COMPLETED!${NC} ] your machine is ready to vispa2!\n"
