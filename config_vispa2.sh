@@ -490,6 +490,8 @@
 	sudo ln -sf ${SCRIPT}/import_iss.py /usr/bin/import_iss 2> /dev/null
 	printf "[ ${CYAN}link${NC} ] in /usr/bin/fqreverseextract.pureheader\n"
 	sudo ln -sf ${SCRIPT}/fqreverseextract.pureheader.py /usr/bin/fqreverseextract_pureheader 2> /dev/null
+	printf "[ ${CYAN}link${NC} ] in /usr/bin/faextract.pureheader\n"
+	sudo ln -sf ${SCRIPT}/faextract.pureheader.py /usr/bin/faextract_pureheader 2> /dev/null
 	printf "[ ${CYAN}link${NC} ] in /usr/bin/fqextract.pureheader\n"
 	sudo ln -sf ${SCRIPT}/fqextract.pureheader.py /usr/bin/fqextract_pureheader 2> /dev/null
 	printf "[ ${CYAN}link${NC} ] in /usr/bin/rev_extract_header\n"
