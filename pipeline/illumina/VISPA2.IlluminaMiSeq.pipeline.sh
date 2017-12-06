@@ -933,15 +933,9 @@ fi
 # CollectInsertSizeMetrics HISTOGRAM_FILE=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.hist.pdf INPUT=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.bam OUTPUT=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.summary 
 
 #remove unnecessary TAGs
-for path_DIRECTORY in $( ls -d ${OUTDIR_MERGE_ISS}/*/ ); do
-	folder=$( basename $path_DIRECTORY )
-	if [[ -d $path_DIRECTORY ]]; then
-		refactored=${path_DIRECTORY}*'_refactored.tsv'
-		barcode=${OUTDIR_MERGE_QUAL}/${folder}/*'noPlasmids.noPhiX.TAGs.fa.gz'
-		cat $refactored | cut -f1 | tail -n +2 > tmp_header_r2.txt
-		zcat $barcode | faextract_pureheader tmp_header_r2.txt | gzip > ${OUTDIR_MERGE_QUAL}/$folder/r2.$folder.qf.noPlasmids.noPhiX.TAGs.fa.gz
-	fi
-done
+cat ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv | cut -f1 | tail -n +2 > ${TMPDIR}/tmp_header_r2.txt
+zcat ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz | faextract_pureheader ${TMPDIR}/tmp_header_r2.txt | pigz -f -c > ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz
+rm ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz;
 
 rm -f tmp_header_r2.txt
 
