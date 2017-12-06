@@ -936,6 +936,8 @@ fi
 cat ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv | cut -f1 | tail -n +2 > ${TMPDIR}/tmp_header_r2.txt
 zcat ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz | faextract_pureheader ${TMPDIR}/tmp_header_r2.txt | pigz -f -c > ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz
 rm ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz;
+mv ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz
+
 
 #### Compressing refactored iss file
 pigz --best -f ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv;
