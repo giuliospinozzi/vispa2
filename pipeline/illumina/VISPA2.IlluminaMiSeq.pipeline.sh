@@ -319,7 +319,7 @@ for PLASMID in kana amp; do
 	# rm ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sam
 	
 	### NEW version (without sam output)
-	bwa-stable mem -k 14 -r 1 -T 15 -c 1 -t ${MAXTHREADS} /opt/genome/vector/lv/bwa_7/lv.plasmid.${PLASMID}.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 20 -uS - | samtools sort - ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted
+	bwa-stable mem -k 14 -r 1 -T 15 -c 1 -t ${MAXTHREADS} /opt/genome/vector/lv/bwa_7/plasmid.${PLASMID}.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 20 -uS - | samtools sort - ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted
 	
 	# fastqc -o ${OUTDIR_POOL_QUAL} --contaminants ${SEQCONTAM} -t ${MAXTHREADS} -f bam ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.${PLASMID}.merge.bam
 	samtools view ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted.bam | cut -f1 > ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.list
@@ -931,6 +931,19 @@ fi
 
 # echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Collect insert size stats of reliable merged BAM" 
 # CollectInsertSizeMetrics HISTOGRAM_FILE=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.hist.pdf INPUT=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.bam OUTPUT=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.summary 
+
+#remove unnecessary TAGs
+for path_DIRECTORY in $( ls -d ${OUTDIR_MERGE_ISS}/*/ ); do
+	folder=$( basename $path_DIRECTORY )
+	if [[ -d $path_DIRECTORY ]]; then
+		refactored=${path_DIRECTORY}*'_refactored.tsv'
+		barcode=${OUTDIR_MERGE_QUAL}/${folder}/*'noPlasmids.noPhiX.TAGs.fa.gz'
+		cat $refactored | cut -f1 | tail -n +2 > tmp_header_r2.txt
+		zcat $barcode | faextract_pureheader tmp_header_r2.txt | gzip > ${OUTDIR_MERGE_QUAL}/$folder/r2.$folder.qf.noPlasmids.noPhiX.TAGs.fa.gz
+	fi
+done
+
+rm -f tmp_header_r2.txt
 
 #### Compressing refactored iss file
 pigz --best -f ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv;
