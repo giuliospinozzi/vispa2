@@ -61,7 +61,7 @@
 	function checkAllPacks () {
 
 		echo "@  Checking if all pack are installed"
-		list_dependencies=(mysql-server pigz parallel curl bwa samtools ea-utils flexbar fastx-toolkit bamtools picard-tools bedtools mercurial python-pip libmysqlclient-dev apache2 ruby php libapache2-mod-php php-mcrypt php-mysql dos2unix)
+		list_dependencies=(mysql-server pigz parallel curl bwa samtools ea-utils flexbar fastx-toolkit bamtools picard-tools bedtools mercurial python-pip libmysqlclient-dev apache2 ruby php libapache2-mod-php php-mcrypt php-mysql dos2unix python-tk)
 		for i in ${list_dependencies[@]}; do
 			if [[ `dpkg -s $i 2> /dev/null | wc -l` > 0 ]]; then
 				printf "[ ${GREEN}OK${NC} ] $i installed correctly\n"
@@ -170,7 +170,7 @@
 
 ###################### DEPENDENCIES ######################
 
-	list_dependencies=(mysql-server fastqc trimmomatic pigz parallel curl flexbar fastx-toolkit bamtools picard-tools bedtools mercurial python-pip libmysqlclient-dev apache2 ruby php libapache2-mod-php php-mcrypt php-mysql dos2unix $__vispa2 $__integration_analysis bwa samtools ea-utils)
+	list_dependencies=(mysql-server fastqc trimmomatic pigz parallel curl flexbar fastx-toolkit bamtools picard-tools bedtools mercurial python-pip libmysqlclient-dev apache2 ruby php libapache2-mod-php php-mcrypt php-mysql dos2unix $__vispa2 $__integration_analysis bwa samtools ea-utils python-tk)
 
 	echo "
         +--------------------------------------------------------+
@@ -457,6 +457,15 @@
 	printf "[ ${CYAN}link${NC} ] ${BIN}/MergeSamFiles /usr/bin/MergeSamFiles \n"
 	sudo ln -sf ${BIN}/MergeSamFiles /usr/bin/MergeSamFiles 2> /dev/null
 
+	# R installing sonicLength
+	# Create file
+	echo 'install.packages("sonicLength", repos="http://R-Forge.R-project.org")' > install-packages.R
+	# Run command
+	R CMD BATCH install-packages.R
+	# delete file
+	sudo rm install-packages.R
+	sudo rm install-packages.Rout
+	
 	# Python
 	# The following packages are required:
 
@@ -464,7 +473,7 @@
 	echo "STEP 5: PYTHON CONFIGURATION"
 	echo ""
 
-	listPypack=(MySQL-python pybedtools biopython HTSeq rpy2==2.7.8 scipy numpy matplotlib xlsxwriter pandas pysam==0.7.7)
+	listPypack=(MySQL-python pybedtools biopython HTSeq rpy2==2.7.8 scipy numpy matplotlib xlsxwriter pandas pysam==0.7.7 editdistance)
 	for i in ${listPypack[@]}; do
 		printf "[ ${GREEN}add python pack${NC} ] python pack ${i}\n" 
 		installPyPack "$i"
