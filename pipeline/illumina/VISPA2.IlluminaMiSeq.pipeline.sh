@@ -82,7 +82,7 @@ LTR="${24}";
 LTR_rc="${25}";
 LC_fwd="${26}";
 LC_rev="${27}";
-SEQCONTAM="/opt/applications/scripts/vispa2/vector/known.seqs.contaminants.tsv"
+SEQCONTAM="/opt/applications/scripts/isatk/vector/known.seqs.contaminants.tsv"
 # suboptimal threshold set up
 SUBOPTIMALTHRESHOLD="${22}"
 
@@ -281,7 +281,7 @@ echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] PHIX Alignment to reference genome e
 # rm ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.phix.PE.sam
 
 ### NEW version (without sam output)
-bwa-stable mem -k 16 -r 1 -M -T 15 -t ${MAXTHREADS} ${PHIXGENOME} <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.phix.PE.bam;
+bwa-stable mem -k 16 -r 1 -M -v 1 -T 15 -t ${MAXTHREADS} ${PHIXGENOME} <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 25 -f 35 -uS - > ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.phix.PE.bam;
 
 echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Filtering raw data"
 samtools view ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.phix.PE.bam | cut -f 1 > ${TMPDIR}/PHIX.header.list;
@@ -290,8 +290,8 @@ rm ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.phix.PE.bam ${TMPDIR}/PHIX.header.lis
 ## rename files
 BNAME_R1=`basename ${R1_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
 BNAME_R2=`basename ${R2_FASTQ} | sed 's/.gz//g' | cut -d'.' -f1`;
-zcat ${R1_FASTQ} | fqreverseextract_pureheader ${TMPDIR}/PHIX.header.sorted.list | pigz --best -f -c > ${TMPDIR}/${BNAME_R1}_R1_nophix.fastq.gz &
-zcat ${R2_FASTQ} | fqreverseextract_pureheader ${TMPDIR}/PHIX.header.sorted.list | pigz --best -f -c > ${TMPDIR}/${BNAME_R2}_R2_nophix.fastq.gz &
+zcat ${R1_FASTQ} | fqreverseextract_pureheader ${TMPDIR}/PHIX.header.sorted.list | pigz -f -c > ${TMPDIR}/${BNAME_R1}_R1_nophix.fastq.gz &
+zcat ${R2_FASTQ} | fqreverseextract_pureheader ${TMPDIR}/PHIX.header.sorted.list | pigz -f -c > ${TMPDIR}/${BNAME_R2}_R2_nophix.fastq.gz &
 wait
 # checking VARS
 echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Checking Variables ";
@@ -319,7 +319,7 @@ for PLASMID in kana amp; do
 	# rm ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sam
 	
 	### NEW version (without sam output)
-	bwa-stable mem -k 14 -r 1 -T 15 -c 1 -t ${MAXTHREADS} /opt/genome/vector/lv/bwa_7/plasmids.${PLASMID}.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 20 -uS - | samtools sort - ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted
+	bwa-stable mem -k 14 -r 1 -v 1 -T 15 -c 1 -t ${MAXTHREADS} /opt/genome/vector/plasmid/plasmids.${PLASMID}.fa <(zcat ${R1_FASTQ} ) <(zcat ${R2_FASTQ} ) | samtools view -F 2308 -q 20 -uS - | samtools sort - ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted
 	
 	# fastqc -o ${OUTDIR_POOL_QUAL} --contaminants ${SEQCONTAM} -t ${MAXTHREADS} -f bam ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.${PLASMID}.merge.bam
 	samtools view ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.sorted.bam | cut -f1 > ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.${PLASMID}.list
@@ -329,8 +329,8 @@ sort --parallel=5 -u ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.*.list > ${OUTDIR_V
 
 echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Extract no PLASMIDS reads from raw data"
 ### ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz
-zcat ${R1_FASTQ} | fqreverseextract_pureheader ${OUTDIR_VECTOR_POOL}/${DISEASE}_${PATIENT}_${POOL}.plasmids.list | pigz --best -f -c > ${TMPDIR}/${BNAME_R1}_noPlasmids.fastq.gz &
-zcat ${R2_FASTQ} | fqreverseextract_pureheader ${OUTDIR_VECTOR_POOL}/${DISEASE}_${PATIENT}_${POOL}.plasmids.list | pigz --best -f -c > ${TMPDIR}/${BNAME_R2}_noPlasmids.fastq.gz &
+zcat ${R1_FASTQ} | fqreverseextract_pureheader ${OUTDIR_VECTOR_POOL}/${DISEASE}_${PATIENT}_${POOL}.plasmids.list | pigz -f -c > ${TMPDIR}/${BNAME_R1}_noPlasmids.fastq.gz &
+zcat ${R2_FASTQ} | fqreverseextract_pureheader ${OUTDIR_VECTOR_POOL}/${DISEASE}_${PATIENT}_${POOL}.plasmids.list | pigz -f -c > ${TMPDIR}/${BNAME_R2}_noPlasmids.fastq.gz &
 wait
 # var renaming
 rm ${R1_FASTQ} ${R2_FASTQ}
@@ -338,8 +338,8 @@ R1_FASTQ="${TMPDIR}/${BNAME_R1}_noPlasmids.fastq.gz"
 R2_FASTQ="${TMPDIR}/${BNAME_R2}_noPlasmids.fastq.gz"
 
 # file compression
-pigz --best -f ${OUTDIR_VECTOR_POOL}/${DISEASE}_${PATIENT}_${POOL}.plasmids.list
-pigz --best -f ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.*.list
+pigz -f ${OUTDIR_VECTOR_POOL}/${DISEASE}_${PATIENT}_${POOL}.plasmids.list
+pigz -f ${TMPDIR}/${DISEASE}_${PATIENT}_${POOL}.*.list
 # get the number of remaining sequences
 RAW_NO_PLASMID=$((`zcat ${R1_FASTQ} | wc -l | cut -d' ' -f1 `/4)) ;
 ##### ================ PLASMIDS quantification POOL based - end ======================== #####
@@ -347,7 +347,7 @@ RAW_NO_PLASMID=$((`zcat ${R1_FASTQ} | wc -l | cut -d' ' -f1 `/4)) ;
 # FASTA of RANDOM TAGs
 if [ ${FASTQ_QF} = "slim" ]; then
 	echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Export Random TAGs from R2"
-	trimmomatic SE -phred33 -threads $MAXTHREADS ${R2_FASTQ} "/dev/stdout" CROP:12 | fastq_to_fasta -Q 33 -n | pigz --best -f -c > ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz
+	trimmomatic SE -phred33 -threads $MAXTHREADS ${R2_FASTQ} "/dev/stdout" CROP:12 | fastq_to_fasta -Q 33 -n | pigz -f -c > ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz
 fi
 
 ## remove first N bases
@@ -447,12 +447,12 @@ for b in ${BCLTR[@]}; do
 		    echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Alignment to reference VECTOR genome"
 		    ## --- paired-end reads ---
 			# low seed value due to small genome
-		    bwa-stable mem -k 14 -r 1 -T 15 -c 1 -R "@RG\tID:LTR${b}_LC${k}\tSM:Vector\tCN:TIGET" -t ${MAXTHREADS} ${VECTORGENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz ) <(zcat ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz ) > ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sam
+		    bwa-stable mem -k 14 -r 1 -v 1 -T 15 -c 1 -R "@RG\tID:LTR${b}_LC${k}\tSM:Vector\tCN:TIGET" -t ${MAXTHREADS} ${VECTORGENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz ) <(zcat ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz ) > ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sam
 			samtools view -F 2308 -q 14 -f 64 -uS ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sam | samtools sort - ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md
 			samtools index ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.bam ;
 			echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Import data into DB from BAM (new table different from the standard one)" 
 			## --- single end (rescued ones) ---
-			bwa-stable mem -k 14 -r 1 -T 15 -c 1 -R "@RG\tID:LTR${b}_LC${k}\tSM:Vector\tCN:TIGET" -t ${MAXTHREADS} ${VECTORGENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.rescued.fastq.gz ) > ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.single.sam
+			bwa-stable mem -k 14 -r 1 -v 1 -T 15 -c 1 -R "@RG\tID:LTR${b}_LC${k}\tSM:Vector\tCN:TIGET" -t ${MAXTHREADS} ${VECTORGENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.rescued.fastq.gz ) > ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.single.sam
 			samtools view -F 2308 -q 14 -uS ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.single.sam | samtools sort - ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.single.sorted.md
 			rm ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.single.sam
 			samtools index ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.single.sorted.md.bam ;
@@ -466,13 +466,13 @@ for b in ${BCLTR[@]}; do
 			# fastqc -o ${OUTDIR_POOL_QUAL} --contaminants ${SEQCONTAM} -t ${MAXTHREADS} -f bam ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.merge.bam
 			echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Extract no LV reads from raw data"
 			### ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz
-			zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz | fqreverseextract_pureheader ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list | pigz --best -f -c > ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz 
-			zcat ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz | fqreverseextract_pureheader ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list | pigz --best -f -c > ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz
-			zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.rescued.fastq.gz | fqreverseextract_pureheader ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list | pigz --best -f -c > ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.single.fastq.gz
+			zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz | fqreverseextract_pureheader ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list | pigz -f -c > ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz 
+			zcat ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz | fqreverseextract_pureheader ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list | pigz -f -c > ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz
+			zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.rescued.fastq.gz | fqreverseextract_pureheader ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list | pigz -f -c > ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.single.fastq.gz
 			# remove
 		    rm ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sam;
 		    # rm ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.bam
-		    pigz --best -f ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list
+		    pigz -f ${TMPDIR}/bcmuxall/${DISEASE}_${PATIENT}_${POOL}.LTR${b}.LC${k}.noLTRLC.sorted.md.lvseqs.list
 			##### ================ LV quantification TAG based - end ======================== #####
 		# else 
 		# 	echo "Tag not in  the association file, go to the next TAG please."; 
@@ -494,8 +494,8 @@ for b in ${BCLTR[@]}; do
 		    echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Alignment to reference genome in PE and SE using BWA MEM"
 			# test with  -P -M -c 2 -T 15 -> very stringent... too few reads in output
 			# explaination: -c 1 -> keep only reads with 1 MEM; -P -> try to rescue some pairs with SW:: ATTENTION!!!!! This option will destroy all paired-end reads!!!!! Do NOT USE IT!; -T 15 -> min alignment score; -M -> flag short alignments (for Picard);
-			bwa-stable mem -k 18 -r 1 -M -T 15 -c 1 -R "@RG\tID:$j\tSM:LTR${b}.LC${k}\tCN:TIGET.${DISEASE}.${PATIENT}.${POOL}" -t ${MAXTHREADS} ${GENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz ) <(zcat ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz ) > ${TMPDIR}/sam/LTR${b}.LC${k}.sam
-			bwa-stable mem -k 18 -r 1 -M -T 15 -c 1 -R "@RG\tID:$j\tSM:LTR${b}.LC${k}\tCN:TIGET.${DISEASE}.${PATIENT}.${POOL}" -t ${MAXTHREADS} ${GENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.single.fastq.gz ) > ${TMPDIR}/sam/LTR${b}.LC${k}.single.sam
+			bwa-stable mem -k 18 -r 1 -M -v 1 -T 15 -c 1 -R "@RG\tID:$j\tSM:LTR${b}.LC${k}\tCN:TIGET.${DISEASE}.${PATIENT}.${POOL}" -t ${MAXTHREADS} ${GENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz ) <(zcat ${TMPDIR}/bcmuxall/r2.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz ) > ${TMPDIR}/sam/LTR${b}.LC${k}.sam
+			bwa-stable mem -k 18 -r 1 -M -v 1 -T 15 -c 1 -R "@RG\tID:$j\tSM:LTR${b}.LC${k}\tCN:TIGET.${DISEASE}.${PATIENT}.${POOL}" -t ${MAXTHREADS} ${GENOME} <(zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.single.fastq.gz ) > ${TMPDIR}/sam/LTR${b}.LC${k}.single.sam
 
 			# create BAM and sort them
 			echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Creating BAM and indexes (filter from here the dataset using only valid reads: mapped and primary)"
@@ -504,8 +504,10 @@ for b in ${BCLTR[@]}; do
 			rm ${TMPDIR}/sam/LTR${b}.LC${k}.single.sam;
 			samtools merge -h ${TMPDIR}/sam/LTR${b}.LC${k}.sam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.tmp.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.pe.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.se.bam;
 			samtools sort ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.tmp.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md;
-			samtools index ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.bam;
-			rm ${TMPDIR}/sam/LTR${b}.LC${k}.sam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.tmp.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.pe.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.se.bam;
+
+			# Removing Reads in chrM and chrUn
+			samtools view -h ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.bam | awk '{if($3 != "chrM" && $3 != "chrUn"){print $0}}' | samtools view -Sb - > ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.cleaned.bam
+			samtools index ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.cleaned.bam
 
 			## Repeats Identification
 			if [ ${REPEATS} = "repeats_yes" ]
@@ -524,6 +526,8 @@ for b in ${BCLTR[@]}; do
 				isa_importrediss_frombed -b ${OUTDIR_POOL_ISS_REPEATS}/LTR${b}.LC${k}.RM.R1.bed -a ${ASSOCIATIONFILE} --patient ${PATIENT} --pool ${POOL} --tag ${TAG} -d ${DBHOSTID} --dbschema ${DBSCHEMA} --dbtable ${DBTABLE}_repeats
 				rm ${OUTDIR_POOL_ISS_REPEATS}/LTR${b}.LC${k}.RM.R1.bed;
 			fi
+
+			rm ${TMPDIR}/sam/LTR${b}.LC${k}.sam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.tmp.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.pe.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.se.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.bam;
 
 		    ##### ======= remove TMP no vector files ==== avoid redundancy =====
 		    # rm ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz 
@@ -551,7 +555,7 @@ for b in ${BCLTR[@]}; do
 				# rm ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.pg.clipstats
 
 				### TMP!!!
-				ln -s ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.pg.bam
+				ln -s ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.cleaned.bam ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.pg.bam
 				samtools index ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.pg.bam
 
 				# 
@@ -705,7 +709,7 @@ for b in ${BCLTR[@]}; do
 			TRIMMING_FINAL_RESCUED=$((`zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.rescued.fastq.gz | wc -l | cut -d' ' -f1 `/4)) ;
 			TRIMMING_FINAL_LTRLC=$((`zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.fastq.gz | wc -l | cut -d' ' -f1 `/4)) ;
 
-			BWA_RESULTS=`samtools flagstat ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.bam `
+			BWA_RESULTS=`samtools flagstat ${TMPDIR}/bam/LTR${b}.LC${k}.sorted.md.cleaned.bam `
 			BWA_INPUT_PAIRED=$((`zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.fastq.gz  | wc -l | cut -d' ' -f1 `/4)) ;
 			BWA_INPUT_SINGLE=$((`zcat ${TMPDIR}/bcmuxall/r1.no12.LTR${b}.LC${k}.noLTRLC.noVector.single.fastq.gz  | wc -l | cut -d' ' -f1 `/4)) ;
 			BWA_INPUT=$((${BWA_INPUT_PAIRED}+${BWA_INPUT_SINGLE})) ;
@@ -932,15 +936,16 @@ fi
 # echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Collect insert size stats of reliable merged BAM" 
 # CollectInsertSizeMetrics HISTOGRAM_FILE=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.hist.pdf INPUT=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.bam OUTPUT=${OUTDIR_MERGE_BAM}/${PATIENT}_${POOL}.wholepool.rel.summary 
 
-#remove unnecessary TAGs
-cat ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv | cut -f1 | tail -n +2 > ${TMPDIR}/tmp_header_r2.txt
-zcat ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz | faextract_pureheader ${TMPDIR}/tmp_header_r2.txt | pigz -f -c > ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz
-rm ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz;
-mv ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz
-
+if [ ${FASTQ_QF} = "slim" ]; then
+	echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Filtering Random TAGs from R2 with final ISs"
+	cat ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv | cut -f1 | tail -n +2 > ${TMPDIR}/tmp_header_r2.txt
+	zcat ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz | faextract_pureheader ${TMPDIR}/tmp_header_r2.txt | pigz -f -c > ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz
+	mv ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz ${OUTDIR_POOL_BCMUXALL}
+	mv ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.filtered.fa.gz ${OUTDIR_POOL_QUAL}/r2.${POOL}.qf.noPlasmids.noPhiX.TAGs.fa.gz
+fi
 
 #### Compressing refactored iss file
-pigz --best -f ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv;
+pigz -f ${OUTDIR_POOL_ISS}/${DBSCHEMA}_${DBTABLE}_refactored.tsv;
 
 #### clean tmp dir
 echo "<`date +'%Y-%m-%d %H:%M:%S'`> [TIGET] Clean TMP Directory" 
