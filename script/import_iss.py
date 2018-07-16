@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import MySQLdb, sys, os, re, argparse, csv, time
+
+import sys, os, re, argparse, csv, time,MySQLdb
 import pysam
 from operator import itemgetter, attrgetter
 from string import Template
@@ -17,6 +18,7 @@ header = """
  Date:		October 2013
  Contact:	andrea.calabria@hsr.it
  Revision:	0.1 (MP)
+ edited:	July 2018 by Adriano De Marino
 +--------------------------------------------------+
   
  Note:
@@ -40,7 +42,7 @@ Examples of usage (in folder ALIEN /opt/NGS/results/Insulator/Safety/test/f35/ba
 
 """
 
-print header#, usage_example
+print  header #, usage_example 
 
 parser = argparse.ArgumentParser(usage = usage_example, epilog = "[ hSR-TIGET - Vector Integration Core - Bioinformatics ] \n", description = description)
 parser.add_argument('--bam', dest="bamfile", help="BAM file to process. No default option.", action="store", required=True)
@@ -50,7 +52,7 @@ parser.add_argument('--singleEnd', dest="singleEnd", action="store_true", help="
 parser.add_argument('--locusRead', dest="locusRead", action="store", help="If you have a specific read that drives the locus (e.g. read1 or read2), specify it here {read1, read2, alnstart}. This is useful if your experimental design attemps to analyze at the end only one of the two pairs, for example all integration sites come from read1 only. In case of 454, this option is alnstart. Default: 'read1'.", default='read1')
 #parser.add_argument('-o', '--outfilename', dest="outfilename", help="Output file name of the BED file. No default option.", action="store", required=True)
 parser.add_argument('-p', '--processes', dest="processes", help="Number of processes to use. Default 2.", action="store", default=2)
-parser.add_argument('-r', '--regions', dest="regions", help="Regions to process as CSV string in the format: CHR:START-END. Default value is for HG19: '1:1-249250621;2:1-243199373;3:1-198022430;4:1-191154276;5:1-180915260;6:1-171115067;7:1-159138663;8:1-146364022;9:1-141213431;10:1-135534747;11:1-135006516;12:1-133851895;13:1-115169878;14:1-107349540;15:1-102531392;16:1-90354753;17:1-81195210;18:1-78077248;19:1-59128983;20:1-63025520;21:1-48129895;22:1-51304566;X:1-155270560;Y:1-59373566'.", action="store", default="1:1-249250621;2:1-243199373;3:1-198022430;4:1-191154276;5:1-180915260;6:1-171115067;7:1-159138663;8:1-146364022;9:1-141213431;10:1-135534747;11:1-135006516;12:1-133851895;13:1-115169878;14:1-107349540;15:1-102531392;16:1-90354753;17:1-81195210;18:1-78077248;19:1-59128983;20:1-63025520;21:1-48129895;22:1-51304566;X:1-155270560;Y:1-59373566")
+parser.add_argument('-r', '--regions', dest="regions", help="Regions to process as CSV string in the format: CHR:START-END. Default value is for HG19: '1:1-249250621;2:1-243199373;3:1-198022430;4:1-191154276;5:1-180915260;6:1-171115067;7:1-159138663;8:1-146364022;9:1-141213431;10:1-135534747;11:1-135006516;12:1-133851895;13:1-115169878;14:1-107349540;15:1-102531392;16:1-90354753;17:1-81195210;18:1-78077248;19:1-59128983;20:1-63025520;21:1-48129895;22:1-51304566;X:1-155270560;Y:1-59373566;M:1-16571'.", action="store", default="1:1-249250621;2:1-243199373;3:1-198022430;4:1-191154276;5:1-180915260;6:1-171115067;7:1-159138663;8:1-146364022;9:1-141213431;10:1-135534747;11:1-135006516;12:1-133851895;13:1-115169878;14:1-107349540;15:1-102531392;16:1-90354753;17:1-81195210;18:1-78077248;19:1-59128983;20:1-63025520;21:1-48129895;22:1-51304566;X:1-155270560;Y:1-59373566;M:1-16571")
 parser.add_argument('-g', '--genome', dest="genome", help="Select the whole genome with relative regions (this is alterative to regions). If you want to load regions, write this as 'regions'. Default: regions. Values: {regions, hg19, mm9, mm10, mfa5, ce, lv, lvarsa, lvwas, lvkana, lvamp, transposon, giada, lv743, lv3029, hiv, hg19alu, hg19svalalu, mm10alub1, statbach}.", action="store", default="regions")
 parser.add_argument('--dbhost', dest="dbhost", help="Target Database host in which importing data. E.g.: localhost. default=localhost.", action="store", default="localhost")
 parser.add_argument('--dbport', dest="dbport", help="Target Database port in which importing data. E.g.: 3306. default=3306.", action="store", default="3306")
@@ -75,11 +77,13 @@ args = parser.parse_args()
 # init db values -> from UCSC database ChromInfo
 hg19="1:1-249250621;2:1-243199373;3:1-198022430;4:1-191154276;5:1-180915260;6:1-171115067;7:1-159138663;8:1-146364022;9:1-141213431;10:1-135534747;11:1-135006516;12:1-133851895;13:1-115169878;14:1-107349540;15:1-102531392;16:1-90354753;17:1-81195210;18:1-78077248;19:1-59128983;20:1-63025520;21:1-48129895;22:1-51304566;X:1-155270560;Y:1-59373566;M:1-16571"
 mm9="1:1-197195432;2:1-181748087;3:1-159599783;4:1-155630120;5:1-152537259;6:1-149517037;7:1-152524553;8:1-131738871;9:1-124076172;10:1-129993255;11:1-121843856;12:1-121257530;13:1-120284312;14:1-125194864;15:1-103494974;16:1-98319150;17:1-95272651;18:1-90772031;19:1-61342430;X:1-166650296;Y:1-15902555;M:1-16299"
-mm10="1:1-195471971;2:1-182113224;3:1-160039680;4:1-156508116;5:1-151834684;6:1-149736546;7:1-145441459;8:1-129401213;9:1-124595110;10:1-130694993;11:1-122082543;12:1-120129022;13:1-120421639;14:1-124902244;15:1-104043685;16:1-98207768;17:1-94987271;18:1-90702639;19:1-61431566;X:1-171031299;Y:1-91744698"
+mm10="1:1-195471971;2:1-182113224;3:1-160039680;4:1-156508116;5:1-151834684;6:1-149736546;7:1-145441459;8:1-129401213;9:1-124595110;10:1-130694993;11:1-122082543;12:1-120129022;13:1-120421639;14:1-124902244;15:1-104043685;16:1-98207768;17:1-94987271;18:1-90702639;19:1-61431566;X:1-171031299;Y:1-91744698;M:1-16299"
 # BGI macaca fascicularis genome
 bgice="1:1-232298473;2:1-192287759;3:1-199730254;4:1-169826420;5:1-185160406;6:1-180941566;7:1-171133315;8:1-150570238;9:1-133536003;10:1-96524937;11:1-136666246;12:1-108081426;13:1-137686314;14:1-134145161;15:1-108996402;16:1-81259162;17:1-95628244;18:1-75918782;19:1-65364038;20:1-89811811;X:1-155426724;Ur:1-453853"
 # NCBI macaca fascicularis genome
 mfa5="1:1-227556264;2:1-192460366;3:1-192294377;4:1-170955103;5:1-189454096;6:1-181584905;7:1-171882078;8:1-146850525;9:1-133195287;10:1-96509753;11:1-137757926;12:1-132586672;13:1-111193037;14:1-130733371;15:1-112612857;16:1-80997621;17:1-96864807;18:1-75711847;19:1-59248254;20:1-78541002;X:1-152835861;M:1-16575"
+# UCSC Dog Genome
+canFam3="1:1-122678785;2:1-85426708;3:1-91889043;4:1-88276631;5:1-88915250;6:1-77573801;7:1-80974532;8:1-74330416;9:1-61074082;10:1-69331447;11:1-74389097;12:1-72498081;13:1-63241923;14:1-60966679;15:1-64190966;16:1-59632846;17:1-64289059;18:1-55844845;19:1-53741614;20:1-58134056;21:1-50858623;22:1-61439934;23:1-52294480;24:1-47698779;25:1-51628933;26:1-38964690;27:1-45876710;28:1-41182112;29:1-41845238;30:1-40214260;31:1-39895921;32:1-38810281;33:1-31377067;34:1-42124431;35:1-26524999;36:1-30810995;37:1-30902991;38:1-23914537;X:1-123869142;M:1-16727"
 # The following genomes come from TIGET sequences, coded as follows:
 # - lv.backbone.fa: --> lv
 # 	chr1 = LTR + vecore genome; 
@@ -113,6 +117,10 @@ transposon="1:1-6794;2:1-4366"
 # - retro.ada.fa --> giada
 # 	chr1 = full plasmid sequence
 giada="1:1-6185"
+# - RV.genome.plasmid.fa --> SLiM
+# 	chr1 = full plasmid sequence
+# 	chr2 = full plasmid sequence
+retro="1:1-3555;2:1-2535"
 
 ## HIV genome
 hiv="1:1-9718"
@@ -161,7 +169,7 @@ def checkArgs(args):
 	Check file path and do required pre-operations.
 	"""
 	if not os.path.isfile(args.bamfile):
-		print "\n[AP]\tError while reading files: no valid paths.\n\tInput files:\n\tBAM: %s\n\n\tExiting...\n" %(args.bamfile)
+		print  "\n[AP]\tError while reading files: no valid paths.\n\tInput files:\n\tBAM: %s\n\n\tExiting...\n" %(args.bamfile) 
 		sys.exit()
 	if args.indexBAM: # index BAM file
 		indexBAM(args.bamfile)
@@ -170,20 +178,20 @@ def checkArgs(args):
 		args.bamfile = sorted_bamfile
 		indexBAM(args.bamfile)
 	if args.locusRead not in ['read1', 'read2', 'both', 'alnstart']:
-		print "\n[AP]\tError while reading locusRead option: no valid alternative selected. See help for instructions. You set %s\n" %(args.locusRead)
+		print  "\n[AP]\tError while reading locusRead option: no valid alternative selected. See help for instructions. You set %s\n" %(args.locusRead) 
 		sys.exit()
 	if (args.locusRead in ['alnstart'] and not args.singleEnd) or (args.locusRead not in ['alnstart'] and args.singleEnd):
-		print "\n[AP]\tError in input request, it seems that you are asking to import single end data but that the locus reads is set as paired-ends read. With --singleEnd you must use --locusRead alnstart. See help for instructions.\n"
+		print  "\n[AP]\tError in input request, it seems that you are asking to import single end data but that the locus reads is set as paired-ends read. With --singleEnd you must use --locusRead alnstart. See help for instructions.\n" 
 		sys.exit()
 # 	if args.poolID in ['', None] or args.associationID in ['', None]:
-# 		print "\n[AP]\tError in IDs options: Association and Pool ID must be not NULL/None nor empty.\n"
+# 		print  "\n[AP]\tError in IDs options: Association and Pool ID must be not NULL/None nor empty.\n"
 # 		sys.exit()
 	if args.tag is None or args.tag == '':
-		print "\n[AP]\tError in barcode/tag IDs options: it must be not NULL/None nor empty.\n"
+		print  "\n[AP]\tError in barcode/tag IDs options: it must be not NULL/None nor empty.\n" 
 		sys.exit()
 		# check file path of outfile
 	if not os.path.isdir(os.path.split(args.outfile)[0]):
-		print "\n[AP]\tError in output file: no valid path.\n\tYour option:\n\t%s\n\n\tExiting...\n" %(args.outfile)
+		print  "\n[AP]\tError in output file: no valid path.\n\tYour option:\n\t%s\n\n\tExiting...\n" %(args.outfile) 
 		sys.exit()
 
 def parseAssociationfile(infile):
@@ -217,7 +225,7 @@ def parseAssociationfile(infile):
 					"poolID": row[-1],
 					}
 			else:
-				print "[AP]\tWarning: this file contais a blank row!!!! Check it please."
+				print  "[AP]\tWarning: this file contais a blank row!!!! Check it please." 
 	return assodict
 
 def getBAMmapping_sliceBased(bed_row, bam_obj):
@@ -242,10 +250,10 @@ def getBAMmapping_sliceBased(bed_row, bam_obj):
 			outarray_bam_aln.append(bam_aln)
 	# return data
 	if len(outarray_bam_aln) == 0:
-		print "[AP]\tERROR:\tSequence not found. Looking for sequences from BED interval (%s:%d-%d/%s), no reads found into BAM. This is NOT POSSIBLE!!! Because BED comes from BAM file.\n" %(bed_row.chrom, bed_row.start - flanking_bases, bed_row.end + flanking_bases, bed_row.strand)
+		print  "[AP]\tERROR:\tSequence not found. Looking for sequences from BED interval (%s:%d-%d/%s), no reads found into BAM. This is NOT POSSIBLE!!! Because BED comes from BAM file.\n" %(bed_row.chrom, bed_row.start - flanking_bases, bed_row.end + flanking_bases, bed_row.strand) 
 		sys.exit()
 	elif len(outarray_bam_aln) > 1:
-		print "[AP]\tWARNING:\tMore than 1 sequences matched conditions. This is strange since we look for header and strand together! Please check it carefully"
+		print  "[AP]\tWARNING:\tMore than 1 sequences matched conditions. This is strange since we look for header and strand together! Please check it carefully" 
 	else:
 		return outarray_bam_aln
 
@@ -267,7 +275,7 @@ def convertBAMarrayToBEDstring(array_bam_aln, delimiter = "\t", newline = "\n"):
 		elif aln.pe_which == 'first':
 			pair_number = 1
 		else:
-			print "[AP]\tERROR:\tNo valid pair in BAM read!! id: ", aln.read.name
+			print  "[AP]\tERROR:\tNo valid pair in BAM read!! id: ", aln.read.name 
 		# now compose string
 		content = delimiter.join(str(x) for x in [aln.iv.chrom, aln.iv.start, aln.iv.end, str(aln.read.name) + "/" + str(pair_number), aln.aQual, aln.iv.strand])
 		outstring += content + newline
@@ -350,7 +358,7 @@ def getRegions(regions_str, add_chr_string = True):
 	return regions_list
 
 
-def worker(todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID, out_q, ): 
+def worker(job_id, todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID, return_list, ):#out_q, ): #edit_by_adriano
 	""" 
 	The worker function, invoked in a process. 
 		region: array of tuples with coordinate to slice chromosome
@@ -362,9 +370,9 @@ def worker(todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID,
 		chr, start, end = region
 		product = {} # k = header, v = 'r1': {'start', 'end'}, 'r2': {'start', 'end'}
 		mybam = bam.fetch(chr, start, end)
-		print "[AP]\t\t...processing region (chr, start, end)", chr, start, end #, " that contains:\n\t\t\t%d mapped reads\n\t\t\t%d unmapped reads" %(mybam.mapped, mybam.unmapped, )
+		print  "[AP]\t\t...processing region (chr, start, end)", chr, start, end  #, " that contains:\n\t\t\t%d mapped reads\n\t\t\t%d unmapped reads" %(mybam.mapped, mybam.unmapped, )
 		
-		print "[AP]\t\t\tAcquiring dictionary of reads in the region (chr, start, enc)\t", chr, start, end #, " that contains:\n\t\t\t%d mapped reads\n\t\t\t%d unmapped reads" %(mybam.mapped, mybam.unmapped, )
+		print  "[AP]\t\t\tAcquiring dictionary of reads in the region (chr, start, enc)\t", chr, start, end #, " that contains:\n\t\t\t%d mapped reads\n\t\t\t%d unmapped reads" %(mybam.mapped, mybam.unmapped, )
 		for bam_alignment in mybam: # for each alignment in the BAM file (both R1 and R2!!!)
 			# get orientation and check for correct position (get end from orientation and start)
 			orientation = '+' # default, if fwd
@@ -400,7 +408,7 @@ def worker(todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID,
 			# paired ends experiment case
 			if not singleEnd:
 				if not bam_alignment.is_read2: # all but not read 2: this means read 1 and potentially all singletones from r1
-					if product.has_key(bam_alignment.qname):
+					if bam_alignment.qname in product:
 						product[bam_alignment.qname]['r1'] = {		'start': aln_start, 
 																	'end': aln_end, 
 																	'strand': orientation , 
@@ -436,7 +444,7 @@ def worker(todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID,
 															}
 													}
 				else: # the r2 reads
-					if product.has_key(bam_alignment.qname):
+					if bam_alignment.qname in product:
 						product[bam_alignment.qname]['r2'] = {	'start': aln_start, 
 																'end': aln_end, 
 																'strand': orientation , 
@@ -453,7 +461,7 @@ def worker(todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID,
 																'quality': bam_alignment.mapq,
 																'nasequence': nasequence,
 																} 
-						#print bam_alignment.qname
+						#print  bam_alignment.qname
 					else:
 						product[bam_alignment.qname] = {	'r2': {	'start': aln_start, 
 																	'end': aln_end, 
@@ -497,65 +505,71 @@ def worker(todo_regions, bam, singleEnd, locusRead, dict_association, barcodeID,
 		if locusRead == 'read1': # locus is in r1
 			locus = 'r1'
 			mate = 'r2'
-			for k, v in product.iteritems():
+			for k, v in product.items():
 				# set prod end 
 				prod_end = None
-				if v.has_key(mate): # if it has the pair -> this is the end
+				if mate in v: # if it has the pair -> this is the end
 					prod_end = v[mate]['start']
-				if v.has_key(locus):
+				if locus in v:
 					if prod_end is None:
 						prod_end = v[locus]['end'] # if no pair -> this prod makes the end
 					is_array = [k, v[locus]['chr'], v[locus]['start'], prod_end, v[locus]['strand'], dict_association[barcodeID]['associationID'], 'NULL', dict_association[barcodeID]['poolID'], ]
 					for x in readorder: # first the locus read
 						is_array.append( str(v[locus][x]) )
-					if v.has_key(mate):# then the mate read, if it exists
+					if mate in v:# then the mate read, if it exists
 						for x in readorder: 
 							is_array.append( str(v[mate][x]) )
 					else:
 						for x in readorder: 
 							is_array.append( 'NULL' )
 						####### -> ???? is_array.append( str('NULL') for x in range(0,len(readorder)))
-					outdata.append(is_array) # append results to output
+					#outdata.append(is_array) # append results to output 		#edited_by_adriano date: 13 july 2018
+					return_list.append(is_array) 						#edited_by_adriano date: 13 july 2018
 		elif locusRead == 'read2': # locus in r2
 			locus = 'r2'
 			mate = 'r1'
-			for k, v in product.iteritems():
+			for k, v in product.items():
 				# set prod end 
 				prod_end = None
-				if v.has_key(mate): # if it has the pair -> this is the end
+				if mate in v: # if it has the pair -> this is the end
 					prod_end = v[mate]['start']
-				if v.has_key(locus):
+				if locus in v:
 					if prod_end is None:
 						prod_end = v[locus]['end'] # if no pair -> this prod makes the end
 					is_array = [k, v[locus]['chr'], v[locus]['start'], prod_end, v[locus]['strand'], dict_association[barcodeID]['associationID'], 'NULL', dict_association[barcodeID]['poolID'], ]
 					for x in readorder: # first the locus read
 						is_array.append( str(v[locus][x]) )
-					if v.has_key(mate):# then the mate read, if it exists
+					if mate in v:# then the mate read, if it exists
 						for x in readorder: 
 							is_array.append( str(v[mate][x]) )
 					else:
 						for x in readorder: 
 							is_array.append( 'NULL' )
 						####### -> ???? is_array.append( str('NULL') for x in range(0,len(readorder)))
-					outdata.append(is_array) # append results to output
+					#outdata.append(is_array) # append results to output 	#edited_by_adriano date: 13 july 2018
+					return_list.append(is_array)						#edited_by_adriano date: 13 july 2018
 		elif locusRead == 'alnstart': # locus by alignment start
 			locus = 'r'
-			for k, v in product.iteritems():
+			for k, v in product.items():
 				is_array = [k, v[locus]['chr'], v[locus]['start'], v[locus]['end'], v[locus]['strand'], dict_association[barcodeID]['associationID'], 'NULL', dict_association[barcodeID]['poolID'], ]
 				for x in readorder: # first the locus read
 					is_array.append( str(v[locus][x]) )
 				for x in readorder: 
 					is_array.append( 'NULL' )
-				outdata.append(is_array) # append results to output
+				#outdata.append(is_array) # append results to output. 	#edited_by_adriano date: 13 july 2018
+				return_list.append(is_array)						#edited_by_adriano date: 13 july 2018
 		else:
-			print "[AP]\tERROR:\tNo valid locus read option.\n"
+			print  "[AP]\tERROR:\tNo valid locus read option.\n" 
 			sys.exit()
 			
-		print "[AP]\t\t\tDone, region completed (chr, start, end)\t\t\t", chr, start, end #, " that contains:\n\t\t\t%d mapped reads\n\t\t\t%d unmapped reads" 
+		print  "[AP]\t\t\tDone, region completed (chr, start, end)\t\t\t", chr, start, end #, " that contains:\n\t\t\t%d mapped reads\n\t\t\t%d unmapped reads" 
 	
-	#print len(outdata), outdata[0]
+	#print  len(outdata), outdata[0]
 	# queue results at the end of this process
-	out_q.put(outdata)
+	
+	#print (outdata) 	#edited_by_adriano date: 13 july 2018
+	#exit()				#edited_by_adriano date: 13 july 2018
+	#out_q.put(outdata) #edited_by_adriano date: 13 july 2018
 
 def importData(dbhost, dbport, dbuser, dbtable, dbschema, dbpassword, localfile, resultdata):
 	"""
@@ -638,7 +652,7 @@ def importData(dbhost, dbport, dbuser, dbtable, dbschema, dbpassword, localfile,
 			KEY prod_locus (prod_locus) 
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1; 
 		""" %(dbtable)
-	#print createtable
+	#print  createtable
 	##os.system("""mysql -u %s --password=%s -h %s --port %s %s -e "%s" """ %(dbuser, dbpassword, dbhost, dbport, dbschema, createtable) )
 	cursor.execute(createtable)
 
@@ -664,9 +678,9 @@ def importData(dbhost, dbport, dbuser, dbtable, dbschema, dbpassword, localfile,
 		# write array of data in this order:: patient, lamid, pool, tag, sample, tissue, timepoint, enzyme, lam_name, header, chr, is, strand, score
 		for row in resultdata[bedstart:bedend]:
 			query_import += " ('" + "', '".join( str(x).replace("'","") for x in row ) + "'), "
-		#print query_import.rstrip(', ')
+		#print  query_import.rstrip(', ')
 		importdata = query_import.rstrip(', ').replace("'NULL'", "NULL")
-		#print importdata
+		#print  importdata
 		cursor.execute( importdata )
 		# increment bed indexes
 		bedstart += step
@@ -700,6 +714,37 @@ def appendDataToFile(resultdata, outfile, delimiter):
 	# return value
 	return 1
 
+
+# NEW VERSION START edited_by_adriano date: 13 july 2018 ######################################################
+###############################################################################################################
+	
+# split a list into evenly sized chunks 								
+def chunks(l, n): 														
+    return [l[i:i+int(n)] for i in range(0, len(l), int(n))]			
+
+def dispatch_jobs(data, bam, dict_asso, job_number):
+    total = len(data)
+    chunk_size = total / job_number
+    slice = chunks(data, chunk_size)
+    jobs = []
+    manager = multiprocessing.Manager()
+    return_list = manager.list()
+    for i, s in enumerate(slice):
+        j = multiprocessing.Process(target=worker, args=(i, s, bam, args.singleEnd, args.locusRead, dict_asso, args.tag, return_list))
+        jobs.append(j)
+    
+    for j in jobs:
+        j.start()
+        
+    for p in jobs:
+        p.join()
+    
+    return return_list
+
+# NEW VERSION END edited_by_adriano date: 13 july 2018 ########################################################
+###############################################################################################################
+
+
 #########################################################################################
 ### MAIN
 #########################################################################################
@@ -710,22 +755,22 @@ def main():
 	"""
 	start_time = time.time() # get read of starting time
 	# first check args and file paths
-	print "[AP]\tChecking inputs."
+	print  "[AP]\tChecking inputs." 
 	checkArgs(args)
 	#associationID = args.associationID.strip()
 	#poolID = args.poolID.strip()
-	print "[AP]\tGet Association data"
+	print  "[AP]\tGet Association data" 
 	dict_asso = parseAssociationfile(args.associationfile)
 	if args.tag not in dict_asso.keys():
-		print "[AP]\tWarning: The input TAG (%s) is not in the Association file list.\n\t\tClosing and Exiting.\n" %(args.tag)
+		print  "[AP]\tWarning: The input TAG (%s) is not in the Association file list.\n\t\tClosing and Exiting.\n" %(args.tag) 
 		sys.exit()
 	# acquire thresholds
-	print "[AP]\tIndexing BAM (this is required if you did not do it)."
+	print  "[AP]\tIndexing BAM (this is required if you did not do it)." 
 	indexing = pysam.index(args.bamfile) # indexing is BLANK
 	# acquire BED and BAM files: INPUT data
-	print "[AP]\tAcquiring data BAM."
+	print  "[AP]\tAcquiring data BAM." 
 	bam = pysam.Samfile(args.bamfile) # the bam file to process
-	print "[AP]\tAcquiring region list to use while slicing BAM."
+	print  "[AP]\tAcquiring region list to use while slicing BAM." 
 	regions = None
 	if args.genome is not "regions":
 		if args.genome == "hg19":
@@ -736,6 +781,8 @@ def main():
 			regions = getRegions(mm10)
 		elif args.genome == "mfa5":
 			regions = getRegions(mfa5)
+		elif args.genome == "canFam3":
+			regions = getRegions(canFam3)
 		elif args.genome == "ce":
 			regions = getRegions(bgice)
 		elif args.genome == "lv":
@@ -752,6 +799,8 @@ def main():
 			regions = getRegions(transposon)
 		elif args.genome == "giada":
 			regions = getRegions(giada)
+		elif args.genome == "retro":
+			regions = getRegions(retro)
 		elif args.genome == "lv743":
 			regions = getRegions(lv743, add_chr_string = False)
 		elif args.genome == "lv3029":
@@ -767,33 +816,42 @@ def main():
 		elif args.genome == "statbach":
 			regions = getRegions(statbach, add_chr_string = False)
 		else:
-			print "\t\tLoading regions error! Please read the help (-h)."
+			print  "\t\tLoading regions error! Please read the help (-h)."
 			sys.exit()
 	else:
 		regions = getRegions(args.regions)
-	print "[AP]\tNow looping over BAM alignments Splitting run in processes..."
-	out_q = Queue() # init process queue
-	nprocs = int(args.processes)
-	chunksize = int(math.ceil(len(regions) / float(nprocs))) # find the chunk wrt processes for running regions
-	procs = [] # array of processes
+	print  "[AP]\tNow looping over BAM alignments Splitting run in processes..." 
+	
+
+	job_number = int(args.processes)
+	resultdata = dispatch_jobs(regions, bam, dict_asso, job_number)
+
+	# OLD version START edited_by_adriano date: 13 july 2018 ############################################
+	####################################################################################################
+	
+	#out_q = multiprocessing.Manager().Queue() # init process queue 
+	#chunksize = int(math.ceil(len(regions) / float(job_number))) # find the chunk wrt processes for running regions
+	#procs = [] # array of processes
 	# run processes in a range of chunks
-	for i in range(nprocs):
-		p = multiprocessing.Process(target=worker, args=(regions[chunksize * i:chunksize * (i + 1)], bam, args.singleEnd, args.locusRead, dict_asso, args.tag, out_q, )) 
-		procs.append(p)
-		p.start()
+	# for i in range(nprocs):
+	# 	p = multiprocessing.Process(target=worker, args=(regions[chunksize * i:chunksize * (i + 1)], bam, args.singleEnd, args.locusRead, dict_asso, args.tag, return_dict, )) 
+	# 	procs.append(p)
+	# 	p.start()
 	# Collect all results into a single result list.
-	print "[AP]\tGetting results from different processes."
-	resultdata = [] # this is what will be written into the file
-	for i in range(nprocs):
-		resultdata += out_q.get()
+	#print  "[AP]\tGetting results from different processes." )
+	#resultdata = [] # this is what will be written into the file 
+	# for i in range(nprocs):									
+	# 	resultdata += out_q.get()								
 	# Wait for all worker processes to finish
-	print "[AP]\tWaiting that all processes end."
-	for p in procs:
-		p.join()
+	#print  "[AP]\tWaiting that all processes end.")
+	# for p in jobs:
+	#	p.join()
+	# for p in procs:
+	# 	p.join()
 	
 	# # write output results from joined array of strings
 	tmpfile = args.dbtable + ".csv"
-	# print "[AP]\tWriting results into output file", tmpfile
+	# print  "[AP]\tWriting results into output file", tmpfile
 	# try:
 	# 	writer = csv.writer(open(tmpfile, 'wb'), delimiter = "\t")
 	# 	for row in resultdata:
@@ -801,20 +859,24 @@ def main():
 	# except csv.Error, e:
 	# 	sys.exit("[AP]\tError while writing CSV BED file %s. Check paths and names." % (tmpfile))
 
+	# OLD version START edited_by_adriano date: 13 july 2018 ############################################
+	####################################################################################################
+	
 	# import data into DB
 	if not args.bypassDB:
-		print "[AP]\tImporting data into DB [dbhost <%s>, dbport <%s>, dbuser <%s>, dbschema <%s>, dbtable <%s>]\n\t Number of reads to be imported: %d" %(args.dbhost, args.dbport, args.dbuser, args.dbschema, args.dbtable, len(resultdata))
+		print  "[AP]\tImporting data into DB [dbhost <%s>, dbport <%s>, dbuser <%s>, dbschema <%s>, dbtable <%s>]\n\t Number of reads to be imported: %d" %(args.dbhost, args.dbport, args.dbuser, args.dbschema, args.dbtable, len(resultdata))
 		dbimportexit = importData(args.dbhost, args.dbport, args.dbuser, args.dbtable, args.dbschema, args.dbpassword, tmpfile, resultdata)
 
 	# write file
 	if not args.bypassOutFile:
-		print "[AP]\tWriting data in flie: %s" %(args.outfile)
+		print  "[AP]\tWriting data in flie: %s" %(args.outfile)
 		appendDataToFile(resultdata, args.outfile, delimiter = '\t')
 
 	elapsed_time = time.time() - start_time # get read of finishing time
-	print "\n[AP]\tTask Finished, closing.\n\tElapsed time: %.2f [seconds]\n" %(elapsed_time)
+	print  "\n[AP]\tTask Finished, closing.\n\tElapsed time: %.2f [seconds]\n" %(elapsed_time)
 	
 
 # sentinel
 if __name__ == "__main__":
     main()
+
