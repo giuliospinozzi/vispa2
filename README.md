@@ -34,6 +34,7 @@ cd vispa2
 ./config_vispa2.sh -s human -i hg19
 ```
 
+<!---
 Details for the configuration and running:
 
 * [Paired-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd) (Illumina) of VISPA2
@@ -45,6 +46,9 @@ Details for the configuration and running:
 * [Installation Test](https://bitbucket.org/andreacalabria/vispa2/wiki/Test%20VISPA2%20installation%20with%20a%20sample%20dataset) for automated test.
 
 * [How to add new reference genomes](https://bitbucket.org/andreacalabria/vispa2/wiki/How%20to%20add%20a%20new%20reference%20genome)
+-->
+
+To run a sample dataset please use the template and data in testing folder.
 
 ### Who do I talk to? ###
 
