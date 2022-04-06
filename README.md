@@ -36,7 +36,7 @@ cd vispa2
 ./config_vispa2.sh -s human -i hg19
 ```
 
-If you have a newer system please use Conda to install some important packages and comment in the configuration scritp the relative lines:
+If you have a newer system please use Conda to install some important packages and comment in the configuration script the relative lines:
 
 conda create -n vispa2
 
@@ -58,6 +58,9 @@ Details for the configuration and running:
 
 * [How to add new reference genomes](https://bitbucket.org/andreacalabria/vispa2/wiki/How%20to%20add%20a%20new%20reference%20genome)
 -->
+
+
+### Test the usage ###
 
 To run a sample dataset please use the template and data in testing folder.
 
