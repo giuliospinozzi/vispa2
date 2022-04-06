@@ -22,6 +22,8 @@ The full research article describes the software and its procecures.
 
 An easy configuration script will support users in the process of installation of VISPA2. Use the following command line statement that will guide you through the installation and set up (as root user):
 
+If you have a Linux System (Debian based) with Python 2.7 and R 3 you can use the configuration script below:
+
 ```
 cd vispa2
 # get help from the configuration file
@@ -33,6 +35,12 @@ cd vispa2
 # Please, enable internet network connections to UCSC web site.
 ./config_vispa2.sh -s human -i hg19
 ```
+
+If you have a newer system please use Conda to install some important packages and comment in the configuration scritp the relative lines:
+
+conda create -n vispa2
+conda install -c conda-forge r-base=3.6.3 python=2.7 r-soniclength rpy2 matplotlib pandas editdistance mysql-python xlsxwriter
+conda install -c bioconda pybedtools samtools=0.1.19 pysam=0.7.7 htseq bedtools=2.22
 
 <!---
 Details for the configuration and running:
