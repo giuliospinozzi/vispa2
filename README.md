@@ -38,11 +38,23 @@ cd vispa2
 
 If you have a newer system please use Conda to install some important packages and comment in the configuration script the relative lines:
 
+```
 conda create -n vispa2
 
-conda install -c conda-forge r-base=3.6.3 python=2.7 r-soniclength rpy2 matplotlib pandas editdistance mysql-python xlsxwriter
+conda install -c bioconda rpy2
 
-conda install -c bioconda pybedtools samtools=0.1.19 pysam=0.7.7 htseq bedtools=2.22
+conda install -c conda-forge/label/cf202003 r-soniclength=1.4.4
+
+conda install -c conda-forge/label/cf202003 pandas=0.17.1
+
+conda install -c bioconda matplotlib
+
+conda install -c conda-forge editdistance mysql-python xlsxwriter
+
+conda install -c bioconda pybedtools pysam=0.7.7 htseq bedtools=2.20.1
+
+```
+Change py interpreter in each py script used (/opt/anaconda3/envs/vispa2/bin/python2)
 
 
 <!---
