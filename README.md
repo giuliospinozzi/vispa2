@@ -60,15 +60,10 @@ Change py interpreter in each py script used (/opt/anaconda3/envs/vispa2/bin/pyt
 <!---
 Details for the configuration and running:
 
-* [Paired-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-PairedEnd) (Illumina) of VISPA2
+* [CreateMatrix](https://github.com/giuliospinozzi/integration_analysis), the program to generate the final matrix file of annotated IS sites.
 
-* [Single-end mode](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-SingleEnd) (454-like) of VISPA2
+* [Installation Test](use vispa2_sampleData.sh in testing folder) for automated test.
 
-* [CreateMatrix](https://bitbucket.org/andreacalabria/vispa2/wiki/VISPA2-IS_Matrix), the program to generate the final matrix file of annotated IS sites.
-
-* [Installation Test](https://bitbucket.org/andreacalabria/vispa2/wiki/Test%20VISPA2%20installation%20with%20a%20sample%20dataset) for automated test.
-
-* [How to add new reference genomes](https://bitbucket.org/andreacalabria/vispa2/wiki/How%20to%20add%20a%20new%20reference%20genome)
 -->
 
 
