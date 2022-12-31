@@ -57,14 +57,13 @@ conda install -c bioconda pybedtools pysam=0.7.7 htseq bedtools=2.20.1
 Change py interpreter in each py script used (/opt/anaconda3/envs/vispa2/bin/python2)
 
 
-<!---
+
 Details for the configuration and running:
 
 * [CreateMatrix](https://github.com/giuliospinozzi/integration_analysis), the program to generate the final matrix file of annotated IS sites.
 
 * [Installation Test](use vispa2_sampleData.sh in testing folder) for automated test.
 
--->
 
 
 ### Test the usage ###
