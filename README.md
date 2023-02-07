@@ -5,6 +5,7 @@ VISPA2: A Scalable Pipeline for High-Throughput Identification and Annotation of
 Authors: Giulio Spinozzi, Andrea Calabria.
 
 Online web site for demo purpose: http://openserver.itb.cnr.it/vispa
+Scientific Paper at BMC Bioinformatics: https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-017-1937-9
 
 
 ## What is this repository for? ##
