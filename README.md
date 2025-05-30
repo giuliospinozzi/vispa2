@@ -24,7 +24,8 @@ The full research article describes the software and its procecures.
 
 An easy configuration script will support users in the process of installation of VISPA2. Use the following command line statement that will guide you through the installation and set up (as root user):
 
-### Option 1 (deprecated): If you have a Linux System (Debian based) with Python 2.7 and R 3 you can use the configuration script below:
+### Option 1 (deprecated) 
+If you have a Linux System (Debian based) with Python 2.7 and R 3 you can use the configuration script below:
 
 ```
 cd vispa2
@@ -38,13 +39,15 @@ cd vispa2
 ./config_vispa2.sh -s human -i hg19
 ```
 
-### Option 2: If you have a newer system please use Conda to install some important packages and comment in the configuration script the relative lines:
+### Option 2 (standard install)
+If you have a newer system please use Conda to install some important packages and comment in the configuration script the relative lines:
 
 ```
 conda env create -f vispa2.yml
 
 ```
 Change py interpreter in each py script used (/opt/anaconda3/envs/vispa2/bin/python2)
+
 Install mysql and configure it:
 ```
 	mysql -uroot -p -e "
